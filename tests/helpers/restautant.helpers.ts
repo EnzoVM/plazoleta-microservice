@@ -2,7 +2,7 @@
 //Array for data testing
 export const dataRestaurantMissing = [
     { 
-        //Data is missing
+        //All the data is missing
     },
     {
         //restaurantName is missing
@@ -53,7 +53,6 @@ export const dataRestaurantMissing = [
         restaurantUrlLogo: "https://cnnespanol.cnn.com/wp-content/uploads/2022/07/220713165438-rba-web-nasa-full-169.jpg?quality=100&strip=info&w=384&h=216&crop=1"
     }
 ]
-
 
 //Array for validate testing
 export const dataRestaurantValidate = [

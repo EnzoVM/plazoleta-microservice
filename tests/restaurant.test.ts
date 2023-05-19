@@ -1,11 +1,9 @@
 import index from '../src/index'
 import request from 'supertest'
-import { dataRestaurantMissing, dataRestaurantValidate } from './helpers'
+import { dataRestaurantMissing, dataRestaurantValidate } from './helpers/restautant.helpers'
 
 const {app, server} = index
 const api = request(app)
-
-
 
 describe('POST /createRestaurant', () => {
 
@@ -23,7 +21,7 @@ describe('POST /createRestaurant', () => {
         expect(response.body.data.restaurantName).toStrictEqual('RestaurantePrueba13')
     })
 
-    test('When data is missing', async () => {
+    test('When one field or all fields are missing', async () => {
         for(const dataRestaurant of dataRestaurantMissing) {
             const response = await api.post('/api/v1/restaurant/createRestaurant').send(dataRestaurant)
                 .expect('Content-Type', /application\/json/)
@@ -34,7 +32,7 @@ describe('POST /createRestaurant', () => {
         }
     })
 
-    test('When owner id is not correspond to an owner ', async () => {
+    test('When owner id is not correspond to an owner', async () => {
         const response = await api.post('/api/v1/restaurant/createRestaurant').send({
             restaurantName: "RestaurantePrueba",
             restaurantNIT: 987457634,
@@ -55,7 +53,7 @@ describe('POST /createRestaurant', () => {
                 .expect(400)
 
             console.log(response.body);
-            expect(response.body.message).toStrictEqual("You have to specify the requested restaurant's data")
+            expect(response.body.message).toStrictEqual('The restaurant data entered is not correct')
         }
     })
 })

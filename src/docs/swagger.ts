@@ -1,5 +1,6 @@
 import swaggerJSDoc, {OAS3Definition, OAS3Options} from "swagger-jsdoc";
 import {createRestaurant, responseCreateRestaurant} from './restaurant.docs'
+import { createDish, responseCreateDish } from "./dish.docs";
 
 const swaggerDefinition: OAS3Definition = {
     openapi: '3.0.0',
@@ -17,16 +18,23 @@ const swaggerDefinition: OAS3Definition = {
     tags: [
         {
             name: 'Restaurant'
+        },
+        {
+            name: 'Dish'
         }
     ],
     paths: {
         '/api/v1/restaurant/createRestaurant':{
             post: createRestaurant
+        },
+        '/api/v1/dish/createDish': {
+            post: createDish
         }
     },
     components: {
         schemas:{
-            responseCreateRestaurant
+            responseCreateRestaurant,
+            responseCreateDish
         }   
     }
 }

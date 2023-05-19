@@ -22,9 +22,7 @@ export default class InsertRestaurant {
 
         const errorDataRestaurant = await validate(new RestaurantDTO(restaurantName, restaurantNIT, restaurantAddress, restaurantPhoneNumber, restaurantUrlLogo, ownerId))
         if(errorDataRestaurant.length > 0){
-            console.log(errorDataRestaurant);
-            
-            throw new Error("You have to specify the requested restaurant's data")
+            throw new Error('The restaurant data entered is not correct')
         }
         
         const roleName = await getRoleIdUserByIdentification(ownerId)

@@ -20,4 +20,15 @@ export default class RestaurantPrismaRepository implements RestaurantRepository{
 
         return restaurantSaved
     }
+
+    async getRestaurantById (restaurantId: string) {
+        const restaurantFound = await prisma.restaurant.findUnique({
+            where: {
+                restaurantId
+            }
+        })
+
+        if(!restaurantFound) {return null}
+        return restaurantFound.restaurantName
+    }
 }
