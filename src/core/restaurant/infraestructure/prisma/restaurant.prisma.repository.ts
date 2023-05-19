@@ -1,6 +1,6 @@
-import prisma from "../../../connections/prisma.connection";
-import Restaurant from "../domain/restaurant.model";
-import RestaurantRepository from "../domain/restaurant.repository";
+import prisma from "../../../../connections/prisma.connection";
+import Restaurant from "../../domain/restaurant.model";
+import RestaurantRepository from "../../domain/restaurant.repository";
 
 
 export default class RestaurantPrismaRepository implements RestaurantRepository{

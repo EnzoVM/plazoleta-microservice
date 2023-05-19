@@ -2,6 +2,7 @@ import {
 IsNumber, 
 IsNumberString, 
 IsString, 
+IsUrl, 
 Matches,
 MaxLength} from 'class-validator'
 
@@ -22,6 +23,7 @@ export default class RestaurantDTO {
     @Matches(/^(\+)?\d+$/, {message: 'El valor debe de ser númerico y puede incluir el símbolo "+" al inicio'})
     restaurantPhoneNumber: string
 
+    @IsUrl()
     @IsString()
     restaurantUrlLogo: string
 
