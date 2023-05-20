@@ -9,7 +9,7 @@ export const addNewRestaurant = async (req: Request, res: Response) => {
     const {restaurantName, restaurantNIT, restaurantAddress, restaurantPhoneNumber, restaurantUrlLogo, ownerId} = req.body
     
     try {
-        const newRestaurantAdded = await insertRestaurant.createNewRestaurant(restaurantName, restaurantNIT, restaurantAddress, restaurantPhoneNumber, restaurantUrlLogo, ownerId)
+        const newRestaurantAdded = await insertRestaurant.createRestaurant(restaurantName, restaurantNIT, restaurantAddress, restaurantPhoneNumber, restaurantUrlLogo, ownerId)
 
         res.status(201).json({
             status: 'OK',

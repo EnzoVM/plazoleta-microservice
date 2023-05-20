@@ -13,12 +13,12 @@ export default class DishDTO {
     @IsString()
     categoryId: string
     
-    @IsString()
+    @IsString({ groups: ['partialValidation']})
     dishDescription: string
     
-    @IsInt({message: 'El número debe de ser entero'})
-    @IsPositive({message: 'El precio ingresado debe de ser positivo'})
-    @Min(1, {message: 'El número tiene que ser mayor a 0'})
+    @IsInt({message: 'El número debe de ser entero', groups: ['partialValidation']})
+    @IsPositive({message: 'El precio ingresado debe de ser positivo', groups: ['partialValidation']})
+    @Min(1, {message: 'El número tiene que ser mayor a 0', groups: ['partialValidation']})
     dishPrice: number
     
     @IsString()

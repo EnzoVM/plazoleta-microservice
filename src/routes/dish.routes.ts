@@ -1,9 +1,10 @@
 import { Router } from "express"
-import { addNewDish } from "../controllers/dish.controller"
+import { createDish, updateDish } from "../controllers/dish.controller"
 
-const dishRoutes = Router()
+const dishRouter = Router()
 
-dishRoutes.post('/createDish', addNewDish)
+dishRouter
+    .post('/create', createDish)
+    .put('/update/:dishId', updateDish)
 
-
-export default dishRoutes
+export default dishRouter

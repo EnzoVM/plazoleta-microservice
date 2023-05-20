@@ -1,7 +1,6 @@
 
 
 //EndPoints
-
 const createRestaurant = {
     tags: ['Restaurant'],
     summary: 'Insert a new restaurant by admin',
@@ -70,7 +69,6 @@ const createRestaurant = {
 
 
 //Schemas of responses
-
 const responseCreateRestaurant = {
     type: 'object',
     properties: {

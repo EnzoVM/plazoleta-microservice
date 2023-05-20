@@ -1,9 +1,9 @@
 import express, {Request, Response} from 'express'
 import morgan from 'morgan'
-import restaurantRoutes from './routes/restaurant.routes'
 import swaggerUi from 'swagger-ui-express'
 import swaggerSetup from './docs/swagger'
-import dishRoutes from './routes/dish.routes'
+import restaurantRouter from './routes/restaurant.routes'
+import dishRouter from './routes/dish.routes'
 
 const app = express()
 
@@ -18,8 +18,8 @@ app.get('/', (request: Request, response: Response) =>{
 })
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSetup))
-app.use('/api/v1/restaurant', restaurantRoutes)
-app.use('/api/v1/dish', dishRoutes)
+app.use('/api/v1/restaurants', restaurantRouter)
+app.use('/api/v1/dishes', dishRouter)
 
 const server = app.listen(app.get('PORT'), ()=>{
       console.log(`Server running on port ${app.get('PORT')}`);

@@ -14,7 +14,7 @@ export default class InsertRestaurant {
         this.imageUploadRepository = imageUploadRepository
     }
     
-    async createNewRestaurant (restaurantName: string, restaurantNIT: number, restaurantAddress: string, restaurantPhoneNumber: string, restaurantUrlLogo: string, ownerId: string) {
+    async createRestaurant (restaurantName: string, restaurantNIT: number, restaurantAddress: string, restaurantPhoneNumber: string, restaurantUrlLogo: string, ownerId: string) {
         
         if(!restaurantName || !restaurantNIT || !restaurantAddress || !restaurantPhoneNumber || !restaurantUrlLogo || !ownerId) {
             throw new Error ('Data is missing')
@@ -33,7 +33,7 @@ export default class InsertRestaurant {
         const restaurantUrlLogoUpload = await this.imageUploadRepository.uploadImage(restaurantUrlLogo)
         
         const newRestaurant = new Restaurant(restaurantName, restaurantNIT, restaurantAddress, restaurantPhoneNumber, restaurantUrlLogoUpload, ownerId)
-        const restaurantInserted = await this.restaurantRepository.insertNewRestaurant(newRestaurant)
+        const restaurantInserted = await this.restaurantRepository.insertRestaurant(newRestaurant)
         return restaurantInserted
     }
 }

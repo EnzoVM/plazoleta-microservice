@@ -5,7 +5,7 @@ import DishRepository from "../../domain/dish.repository";
 
 export default class DishPrismaRepository implements DishRepository{
     
-    async insertNewDish (dish: Dish) {
+    async insertDish (dish: Dish) {
         const dishSaved = await prisma.dishes.create({
             data: {
                 dishId: dish.dishId,
@@ -20,6 +20,20 @@ export default class DishPrismaRepository implements DishRepository{
         })
 
         return dishSaved
+    }
+
+    async updateDishById (dishId: string, dishDescription: string, dishPrice: number) {
+        const dishUpdated = await prisma.dishes.update({
+            where: {
+                dishId
+            },
+            data: {
+                dishDescription,
+                dishPrice
+            }
+        })
+
+        return dishUpdated
     }
 
 }

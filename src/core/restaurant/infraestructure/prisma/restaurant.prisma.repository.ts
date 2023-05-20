@@ -5,7 +5,7 @@ import RestaurantRepository from "../../domain/restaurant.repository";
 
 export default class RestaurantPrismaRepository implements RestaurantRepository{
     
-    async insertNewRestaurant (restaurant: Restaurant) {
+    async insertRestaurant (restaurant: Restaurant) {
         const restaurantSaved = await prisma.restaurant.create ({
             data: {
                 restaurantId: restaurant.restaurantId,
@@ -29,6 +29,6 @@ export default class RestaurantPrismaRepository implements RestaurantRepository{
         })
 
         if(!restaurantFound) {return null}
-        return restaurantFound.restaurantName
+        return restaurantFound
     }
 }

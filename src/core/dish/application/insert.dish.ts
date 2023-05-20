@@ -17,7 +17,7 @@ export default class InsertDish {
         this.imageUploadRepository = imageUploadRepository       
     }
 
-    async createNewDish (dishName: string, categoryId: string, dishDescription: string, dishPrice: number, restaurantId: string, dishUrlImage: string) {
+    async createDish (dishName: string, categoryId: string, dishDescription: string, dishPrice: number, restaurantId: string, dishUrlImage: string) {
 
         if(!dishName || !categoryId || !dishDescription || !dishPrice || !restaurantId || !dishUrlImage){
             throw new Error('Data is missing')
@@ -36,7 +36,7 @@ export default class InsertDish {
         const dishUrlImageUpload = await this.imageUploadRepository.uploadImage(dishUrlImage)
 
         const newDish = new Dish(dishName, categoryId, dishDescription, dishPrice, restaurantId, dishUrlImageUpload, true)
-        const dishInserted = await this.dishRepository.insertNewDish(newDish)
+        const dishInserted = await this.dishRepository.insertDish(newDish)
         return dishInserted
     }
 }

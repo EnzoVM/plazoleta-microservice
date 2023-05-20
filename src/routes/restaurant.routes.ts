@@ -1,8 +1,9 @@
 import { Router } from "express"
 import { addNewRestaurant } from "../controllers/restaurant.controller"
 
-const restaurantRoutes = Router()
+const restaurantRouter = Router()
 
-restaurantRoutes.post('/createRestaurant', addNewRestaurant)
+restaurantRouter
+    .post('/create', addNewRestaurant)
 
-export default restaurantRoutes
+export default restaurantRouter
