@@ -7,7 +7,7 @@ import UpdateDishById from '../core/dish/application/update.dish.by.id'
 const insertDish = new InsertDish(new DishPrismaRepository, new ImagenCloudinaryRepository)
 const updateDishById = new UpdateDishById(new DishPrismaRepository)
 
-export const createDish = async (req: Request, res: Response) => {
+export const createNewDish = async (req: Request, res: Response) => {
     const {dishName, categoryId, dishDescription, dishPrice, restaurantId, dishUrlImage} = req.body
 
     try {
@@ -43,7 +43,7 @@ export const updateDish = async (req:Request, res: Response) => {
     } catch (error:any) {
         
         res.status(400).json({
-            status: 'OK',
+            status: 'Fail',
             message: error.message
         })
     }

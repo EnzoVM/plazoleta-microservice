@@ -5,6 +5,6 @@ export default interface RestaurantRepository {
 
     insertRestaurant: (restaurant: Restaurant) => Promise<Restaurant>
     getRestaurantById: (restaurantId: string) => Promise<Restaurant | null>
-    insertRestaurantEmployee: (restaurantEmployee: RestaurantEmployee) => Promise<RestaurantEmployee>
+    insertEmployeeToRestaurant: (restaurantEmployee: RestaurantEmployee) => Promise<RestaurantEmployee>
 
 }

@@ -33,7 +33,7 @@ export default class RestaurantPrismaRepository implements RestaurantRepository{
         return restaurantFound
     }
 
-    async insertRestaurantEmployee (restaurantEmployee: RestaurantEmployee) {
+    async insertEmployeeToRestaurant (restaurantEmployee: RestaurantEmployee) {
         const restaurantEmployeeSaved = await prisma.restaurantEmployee.create({
             data: {
                 restaurantEmployeeId: restaurantEmployee.restaurantEmployeeId,

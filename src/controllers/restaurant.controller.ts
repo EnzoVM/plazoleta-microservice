@@ -2,12 +2,14 @@ import { Request, Response } from "express"
 import InsertRestaurant  from "../core/restaurant/application/insert.restaurant"
 import RestaurantPrismaRepository from "../core/restaurant/infraestructure/prisma/restaurant.prisma.repository"
 import ImagenCloudinaryRepository from "../core/restaurant/infraestructure/cloudinary/image.cloudinary.repository"
-import InsertRestaurantEmployee from "../core/restaurant/application/insert.restaurant.employee"
+import InsertEmployeeToRestaurant from "../core/restaurant/application/insert.employee.to.restaurant"
+import GetRestaurantById from "../core/restaurant/application/get.restaurant.by.id"
 
 const insertRestaurant = new InsertRestaurant(new RestaurantPrismaRepository, new ImagenCloudinaryRepository)
-const insertRestaurantEmployee = new InsertRestaurantEmployee(new RestaurantPrismaRepository)
+const insertEmployeeToRestaurant = new InsertEmployeeToRestaurant(new RestaurantPrismaRepository)
+const getRestaurantByIdentification = new GetRestaurantById(new RestaurantPrismaRepository)
 
-export const addNewRestaurant = async (req: Request, res: Response) => {
+export const createNewRestaurant = async (req: Request, res: Response) => {
     const {restaurantName, restaurantNIT, restaurantAddress, restaurantPhoneNumber, restaurantUrlLogo, ownerId} = req.body
     
     try {
@@ -28,11 +30,11 @@ export const addNewRestaurant = async (req: Request, res: Response) => {
     }
 }
 
-export const addRestaurantEmployee = async (req: Request, res: Response) => {
+export const createEmployeeToRestaurant = async (req: Request, res: Response) => {
     const {restaurantId, chefId } = req.body
 
     try {
-        const newRestaurantEmployeeAdded = await insertRestaurantEmployee.insertRestaurantEmployee(restaurantId, chefId)
+        const newRestaurantEmployeeAdded = await insertEmployeeToRestaurant.insertEmployeeToRestaurant(restaurantId, chefId)
 
         res.status(201).json({
             status: 'OK',
@@ -45,6 +47,27 @@ export const addRestaurantEmployee = async (req: Request, res: Response) => {
         res.status(400).json({
             status: 'Fail',
             message: error.message
+        })
+    }
+}
+
+export const getRestaurantById = async (req: Request, res: Response) => {
+    const { restaurantId } = req.params
+
+    try {
+        const restaurantFound = await getRestaurantByIdentification.getRestaurantById(restaurantId)
+
+        res.status(200).json({
+            status: 'OK',
+            message: 'The restaurant has been found',
+            data: restaurantFound
+        })
+
+    } catch (error:any) {
+        
+        res.status(400).json({
+            status: 'Fail',
+            message: 'The restaurant has not been found'
         })
     }
 }

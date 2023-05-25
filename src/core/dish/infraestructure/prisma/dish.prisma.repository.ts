@@ -36,4 +36,14 @@ export default class DishPrismaRepository implements DishRepository{
         return dishUpdated
     }
 
+    async getDishById (dishId: string) {
+        const dishFound = await prisma.dishes.findUnique({
+            where:{
+                dishId
+            }
+        })
+
+        return dishFound
+    }
+
 }

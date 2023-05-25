@@ -24,7 +24,7 @@ export const verifyAdministratorRole = (req: Request, res: Response, next: NextF
     } catch (error:any) {
         
         return res.status(401).json({
-            message: error.message
+            message: 'Invalid token'
         })
     }
 }

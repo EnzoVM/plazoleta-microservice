@@ -1,6 +1,6 @@
 import swaggerJSDoc, {OAS3Definition, OAS3Options} from "swagger-jsdoc";
-import {createRestaurant, responseCreateRestaurant} from './restaurant.docs'
-import {createDish, responseCreateDish, updateDish, responseUpdateDish, dishId} from "./dish.docs";
+import {tokenForCreateRestaurant, createRestaurant, responseCreateRestaurant} from './restaurant.docs'
+import {tokenForCreateAndUpdateDish, createDish, responseCreateDish, updateDish, responseUpdateDish} from "./dish.docs";
 
 const swaggerDefinition: OAS3Definition = {
     openapi: '3.0.0',
@@ -35,6 +35,10 @@ const swaggerDefinition: OAS3Definition = {
         }
     },
     components: {
+        securitySchemes: {
+            tokenForCreateRestaurant,
+            tokenForCreateAndUpdateDish
+        },
         schemas:{
             responseCreateRestaurant,
             responseCreateDish,

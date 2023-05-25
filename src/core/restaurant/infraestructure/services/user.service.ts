@@ -4,7 +4,7 @@ const serviceUrl = 'http://localhost:3000'
 
 export const getRoleIdUserByIdentification = async (userId: string) => {
     try {
-        const response = await axios.get(`${serviceUrl}/api/v1/user/getRoleId/${userId}`)
+        const response = await axios.get(`${serviceUrl}/api/v1/users/getRoleId/${userId}`)
 
         const {status, message, data} = response.data
 
@@ -12,13 +12,13 @@ export const getRoleIdUserByIdentification = async (userId: string) => {
 
     } catch (error:any) {
         
-        return {status: 'fail', message: error.message}
+        return {status: 'fail', message: 'ERROR IN USER MICROSERVICE GER ROLE BY ID'}
     }
 }
 
 export const userLogin = async (userEmail: string, userPassword: string) => {
     try {
-        const response = await axios.post(`${serviceUrl}/api/v1/user/login`, {
+        const response = await axios.post(`${serviceUrl}/api/v1/users/login`, {
             userEmail,
             userPassword
         })

@@ -7,7 +7,7 @@ const dishId = {
       type: 'string'
     },
     description: 'This is id of a dish',
-    example: '1700b00e-5bf4-4d00-b34f-bf8fc9ef10d4'
+    example: 'd639054b-148c-4e03-aa89-5c80dc2be73f'
 }
 
 
@@ -16,6 +16,11 @@ const createDish = {
     tags: ['Dish'],
     summary: 'Insert a new dish by an owner',
     description: 'This endpoint is for insert a new dish by an owner',
+    security: [
+        {
+            tokenForCreateAndUpdateDish: []
+        }
+    ],
     requestBody: {
         required: true,
         content: {
@@ -51,7 +56,7 @@ const createDish = {
                             type: "string",
                             description: 'RestaurantID of the new dish',
                             require: true,
-                            example: '08f71c12-407f-44fa-a287-8ae32fef9e0b'
+                            example: 'de891602-ef54-46bc-9356-9e4bf666defc'
                         },
                         dishUrlImage: {
                             type: 'string',
@@ -82,6 +87,11 @@ const updateDish = {
     tags: ['Dish'],
     summary: 'Update a dish by an owner',
     description: 'This endpoint is for update a dish by an owner',
+    security: [
+        {
+            tokenForCreateAndUpdateDish: []
+        }
+    ],
     parameters: [
         dishId
     ],
@@ -124,7 +134,14 @@ const updateDish = {
 }
 
 
-//Schemas of responses
+//Schemas
+const tokenForCreateAndUpdateDish = {
+    type: 'http',
+    scheme: 'bearer',
+    description: 'Use this owner token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3MjkzNjg4ODc5MzIxODU1MjgxIiwidXNlclJvbGUiOiJPd25lciIsImlhdCI6MTY4NTAzOTY4OX0.BPB1Na1rTwqKDdvp8EGKl25psADCUrj9HPLQF6OKs5o',
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3MjkzNjg4ODc5MzIxODU1MjgxIiwidXNlclJvbGUiOiJPd25lciIsImlhdCI6MTY4NTAzOTY4OX0.BPB1Na1rTwqKDdvp8EGKl25psADCUrj9HPLQF6OKs5o'
+}
+
 const responseCreateDish = {
     type: 'object',
     properties: {
@@ -191,7 +208,7 @@ const responseUpdateDish = {
     }
 }
 
-export {createDish, responseCreateDish, updateDish, responseUpdateDish, dishId}
+export {tokenForCreateAndUpdateDish, createDish, responseCreateDish, updateDish, responseUpdateDish, dishId}
 
 
 

@@ -1,10 +1,11 @@
 import { Router } from "express"
-import { createDish, updateDish } from "../controllers/dish.controller"
+import { createNewDish, updateDish } from "../controllers/dish.controller"
+import { verifyOwnerRole } from "../middlewares/verify.owner"
 
 const dishRouter = Router()
 
 dishRouter
-    .post('/create', createDish)
-    .put('/update/:dishId', updateDish)
+    .post('/create', verifyOwnerRole ,createNewDish)
+    .put('/update/:dishId', verifyOwnerRole, updateDish)
 
 export default dishRouter

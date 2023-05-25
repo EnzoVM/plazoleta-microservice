@@ -9,7 +9,7 @@ export const dishDataForCreate = [
         categoryId: "2000001",
         dishDescription: "Este es un plato de prueba",
         dishPrice: 20,
-        restaurantId: "1a2a730e-ee3c-4d4f-9f19-2cab34838950",
+        restaurantId: "de891602-ef54-46bc-9356-9e4bf666defc",
         dishUrlImage: "https://d7lju56vlbdri.cloudfront.net/var/ezwebin_site/storage/images/_aliases/img_1col/noticias/solar-orbiter-toma-imagenes-del-sol-como-nunca-antes/9437612-1-esl-MX/Solar-Orbiter-toma-imagenes-del-Sol-como-nunca-antes.jpg"
     },
     {
@@ -17,7 +17,7 @@ export const dishDataForCreate = [
         dishName: "Plato nuevo",
         dishDescription: "Este es un plato de prueba",
         dishPrice: 20,
-        restaurantId: "1a2a730e-ee3c-4d4f-9f19-2cab34838950",
+        restaurantId: "de891602-ef54-46bc-9356-9e4bf666defc",
         dishUrlImage: "https://d7lju56vlbdri.cloudfront.net/var/ezwebin_site/storage/images/_aliases/img_1col/noticias/solar-orbiter-toma-imagenes-del-sol-como-nunca-antes/9437612-1-esl-MX/Solar-Orbiter-toma-imagenes-del-Sol-como-nunca-antes.jpg"
     },
     {
@@ -25,7 +25,7 @@ export const dishDataForCreate = [
         dishName: "Plato nuevo",
         categoryId: "2000001",
         dishPrice: 20,
-        restaurantId: "1a2a730e-ee3c-4d4f-9f19-2cab34838950",
+        restaurantId: "de891602-ef54-46bc-9356-9e4bf666defc",
         dishUrlImage: "https://d7lju56vlbdri.cloudfront.net/var/ezwebin_site/storage/images/_aliases/img_1col/noticias/solar-orbiter-toma-imagenes-del-sol-como-nunca-antes/9437612-1-esl-MX/Solar-Orbiter-toma-imagenes-del-Sol-como-nunca-antes.jpg"
     },
     {
@@ -33,7 +33,7 @@ export const dishDataForCreate = [
         dishName: "Plato nuevo",
         categoryId: "2000001",
         dishDescription: "Este es un plato de prueba",
-        restaurantId: "1a2a730e-ee3c-4d4f-9f19-2cab34838950",
+        restaurantId: "de891602-ef54-46bc-9356-9e4bf666defc",
         dishUrlImage: "https://d7lju56vlbdri.cloudfront.net/var/ezwebin_site/storage/images/_aliases/img_1col/noticias/solar-orbiter-toma-imagenes-del-sol-como-nunca-antes/9437612-1-esl-MX/Solar-Orbiter-toma-imagenes-del-Sol-como-nunca-antes.jpg"
     },
     {
@@ -50,7 +50,7 @@ export const dishDataForCreate = [
         categoryId: "2000001",
         dishDescription: "Este es un plato de prueba",
         dishPrice: 20,
-        restaurantId: "1a2a730e-ee3c-4d4f-9f19-2cab34838950"
+        restaurantId: "de891602-ef54-46bc-9356-9e4bf666defc"
     }
 ]
 
@@ -77,16 +77,24 @@ export const dishDataValidateForCreate = [
         categoryId: "2000001",
         dishDescription: "Este es un plato de prueba",
         dishPrice: 20.30, //Price is not an integer
-        restaurantId: "1a2a730e-ee3c-4d4f-9f19-2cab34838950",
-        dishUrlImage: "urldeprueba"
+        restaurantId: "de891602-ef54-46bc-9356-9e4bf666defc",
+        dishUrlImage: "https://d7lju56vlbdri.cloudfront.net/var/ezwebin_site/storage/images/_aliases/img_1col/noticias/solar-orbiter-toma-imagenes-del-sol-como-nunca-antes/9437612-1-esl-MX/Solar-Orbiter-toma-imagenes-del-Sol-como-nunca-antes.jpg"
     },
     {
         dishName: "Plato nuevo",
         categoryId: "2000001",
         dishDescription: "Este es un plato de prueba",
         dishPrice: -20, //Price is not positive and greater than 0
-        restaurantId: "1a2a730e-ee3c-4d4f-9f19-2cab34838950",
-        dishUrlImage: "urldeprueba"
+        restaurantId: "de891602-ef54-46bc-9356-9e4bf666defc",
+        dishUrlImage: "https://d7lju56vlbdri.cloudfront.net/var/ezwebin_site/storage/images/_aliases/img_1col/noticias/solar-orbiter-toma-imagenes-del-sol-como-nunca-antes/9437612-1-esl-MX/Solar-Orbiter-toma-imagenes-del-Sol-como-nunca-antes.jpg"
+    },
+    {
+        dishName: "Plato nuevo",
+        categoryId: "2000001",
+        dishDescription: "Este es un plato de prueba",
+        dishPrice: 100, 
+        restaurantId: "de891602-ef54-46bc-9356-9e4bf666defc",
+        dishUrlImage: "urlPrueba"  //URL is wrong
     }
 ]
 
