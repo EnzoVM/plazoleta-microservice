@@ -26,9 +26,7 @@ export default class InsertRestaurant {
         }
         
         const roleName = await getRoleIdUserByIdentification(ownerId)
-        if(roleName.data !== 'Owner'){
-            console.log(roleName);
-            
+        if(roleName.data !== 'Owner'){      
             throw new Error('The entered role does not belong to an owner')
         }
         

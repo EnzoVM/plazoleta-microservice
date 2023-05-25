@@ -2,7 +2,6 @@ import { validate } from "class-validator";
 import DishRepository from "../domain/dish.repository";
 import DishDTO from "../domain/dish.dto";
 
-
 export default class UpdateDishById {
     private readonly dishRepository: DishRepository
 

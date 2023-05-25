@@ -30,37 +30,37 @@ const createDish = {
                     properties: {
                         dishName: {
                             type: 'string',
-                            description: 'Name of the new dish',
+                            description: 'Name of a new dish',
                             require: true,
                             example: 'Plato Prueba'
                         },
                         categoryId: {
                             type: 'string',
-                            description: 'CategoryID of the new dish',
+                            description: 'CategoryID of a new dish',
                             require: true,
                             example: '2000001'
                         },
                         dishDescription: {
                             type: 'string',
-                            description: 'Description of the new dish',
+                            description: 'Description of a new dish',
                             require: true,
                             example: 'Este es un plato de prueba'
                         },
                         dishPrice: {
                             type: 'number',
-                            description: 'Price of the new dish',
+                            description: 'Price of a new dish',
                             require: true,
                             example: 30
                         },
                         restaurantId: {
                             type: "string",
-                            description: 'RestaurantID of the new dish',
+                            description: 'RestaurantID of a new dish',
                             require: true,
                             example: 'de891602-ef54-46bc-9356-9e4bf666defc'
                         },
                         dishUrlImage: {
                             type: 'string',
-                            description: 'URL image of the new dish',
+                            description: 'URL image of a new dish',
                             require: true,
                             example: 'https://d7lju56vlbdri.cloudfront.net/var/ezwebin_site/storage/images/_aliases/img_1col/noticias/solar-orbiter-toma-imagenes-del-sol-como-nunca-antes/9437612-1-esl-MX/Solar-Orbiter-toma-imagenes-del-Sol-como-nunca-antes.jpg'
                         }
@@ -71,7 +71,7 @@ const createDish = {
     },
     responses: {
         '201': {
-            description: 'Results for creating a new dish',
+            description: 'Results of create a new dish',
             content: {
                 'application/json': {
                     schema: {
@@ -104,13 +104,13 @@ const updateDish = {
                     properties: {
                         dishDescription: {
                             type: 'string',
-                            description: 'Description updated of the dish',
+                            description: 'Description updated of a dish',
                             require: true,
                             example: 'Esta es una descripcion actualizada'
                         },
                         dishPrice: {
                             type: 'number',
-                            description: 'Price updated of the dish',
+                            description: 'Price updated of a dish',
                             require: true,
                             example: 120
                         }
@@ -121,7 +121,51 @@ const updateDish = {
     },
     responses: {
         '200': {
-            description: 'Results for updating a dish',
+            description: 'Results of update a dish',
+            content: {
+                'application/json': {
+                    schema: {
+                        $ref: '#/components/schemas/responseUpdateDish'
+                    }
+                }
+            }
+        }
+    }
+}
+
+const updateStateDish = {
+    tags: ['Dish'],
+    summary: 'Update state of a dish by an owner',
+    description: 'This endpoint is for update state of a dish by an owner',
+    security: [
+        {
+            tokenForCreateAndUpdateDish: []
+        }
+    ],
+    parameters: [
+        dishId
+    ],
+    requestBody: {
+        required: true,
+        content: {
+            'application/json': {
+                schema: {
+                    type: 'object',
+                    properties: {
+                        dishActive: {
+                            type: 'boolean',
+                            description: 'State updated of a dish',
+                            require: true,
+                            example: false
+                        }
+                    }
+                }
+            }
+        }
+    },
+    responses: {
+        '200': {
+            description: 'Results of updating state a dish',
             content: {
                 'application/json': {
                     schema: {
@@ -208,7 +252,7 @@ const responseUpdateDish = {
     }
 }
 
-export {tokenForCreateAndUpdateDish, createDish, responseCreateDish, updateDish, responseUpdateDish, dishId}
+export {tokenForCreateAndUpdateDish, createDish, responseCreateDish, updateDish, responseUpdateDish, updateStateDish}
 
 
 

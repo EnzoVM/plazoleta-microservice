@@ -209,6 +209,70 @@ describe('PUT /updateDish', () => {
     })
 })
 
+
+describe('PUT /updateStateDish', () => {
+
+    const dishId = '722a850c-6591-4a6f-b292-2bd07249af60'
+
+    test('Should update state of a dish', async () => {
+        const response = await api.put(`/api/v1/dishes/update/state/${dishId}`).send({
+            dishActive: false
+        }).set('Authorization', `Bearer ${ownerToken}`)
+          .expect('Content-Type', /application\/json/)
+          .expect(200)
+
+        expect(response.body.data.dishActive).toBe(false)
+    })
+
+    test('When there is not token', async () => {
+        const response = await api.put(`/api/v1/dishes/update/state/${dishId}`).send({
+            dishActive: false
+        }).expect('Content-Type', /application\/json/)
+          .expect(401)
+
+        expect(response.body.message).toStrictEqual("Unauthorized access. A valid token is required")
+    })
+
+    test('When a token from another role is entered', async () => {
+        const response = await api.put(`/api/v1/dishes/update/state/${dishId}`).send({
+            dishActive: false
+        }).set('Authorization', `Bearer ${adminToken}`)
+          .expect('Content-Type', /application\/json/)
+          .expect(403)
+
+        expect(response.body.message).toStrictEqual("Access denied. Owner role is required")
+    })
+
+    test('When a token entered is not valid', async () => {
+        const response = await api.put(`/api/v1/dishes/update/state/${dishId}`).send({
+            dishActive: false
+        }).set('Authorization', `Bearer ${tokenInvalid}`)
+          .expect('Content-Type', /application\/json/)
+          .expect(401)
+
+        expect(response.body.message).toStrictEqual("Invalid token")
+    })
+
+    test('When the owner does not belong to the restaurant of the dish', async () => {
+        const response = await api.put(`/api/v1/dishes/update/state/${dishId}`).send({
+            dishActive: false
+        }).set('Authorization', `Bearer ${ownerWrongToken}`)
+          .expect('Content-Type', /application\/json/)
+          .expect(403)
+
+        expect(response.body.message).toStrictEqual("Access denied. This restaurant is not assigned to this owner")
+    })
+
+    test('When the dishActive is missing', async () => {
+        const response = await api.put(`/api/v1/dishes/update/state/${dishId}`).send({})
+            .set('Authorization', `Bearer ${ownerToken}`)
+            .expect('Content-Type', /application\/json/)
+            .expect(400)
+        
+        expect(response.body.message).toStrictEqual('Data is missing')
+    })
+})
+
 afterAll(async () =>{
     await server.close()
 })

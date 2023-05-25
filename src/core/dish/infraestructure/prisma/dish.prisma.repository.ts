@@ -1,3 +1,4 @@
+import { log } from "console";
 import prisma from "../../../../connections/prisma.connection";
 import Dish from "../../domain/dish.model";
 import DishRepository from "../../domain/dish.repository";
@@ -44,6 +45,19 @@ export default class DishPrismaRepository implements DishRepository{
         })
 
         return dishFound
+    }
+
+    async updateStateDishById (dishId: string, dishActive: boolean) {
+        const dishUpdate = await prisma.dishes.update({
+            where: {
+                dishId
+            },
+            data: {
+                dishActive
+            }
+        })
+        
+        return dishUpdate
     }
 
 }

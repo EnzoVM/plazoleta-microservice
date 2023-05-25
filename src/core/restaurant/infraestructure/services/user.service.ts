@@ -15,21 +15,3 @@ export const getRoleIdUserByIdentification = async (userId: string) => {
         return {status: 'fail', message: 'ERROR IN USER MICROSERVICE GER ROLE BY ID'}
     }
 }
-
-export const userLogin = async (userEmail: string, userPassword: string) => {
-    try {
-        const response = await axios.post(`${serviceUrl}/api/v1/users/login`, {
-            userEmail,
-            userPassword
-        })
-
-        const {status, message, data} = response.data
-
-        return {status, message, data}
-
-    } catch (error:any) {
-        
-        return {status: 'Fail', message: error.message}
-    }
-}
-
