@@ -44,4 +44,15 @@ export default class RestaurantPrismaRepository implements RestaurantRepository{
 
         return restaurantEmployeeSaved
     }
+
+    async listAllRestaurants () {
+        try {
+            const restaurantList = await prisma.restaurant.findMany()
+
+            return restaurantList
+        } catch (error) {
+            
+            throw new Error('ERROR IN LIST ALL RESTAURANT PRISMA')
+        }
+    }
 }

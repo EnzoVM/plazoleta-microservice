@@ -4,10 +4,12 @@ import RestaurantPrismaRepository from "../core/restaurant/infraestructure/prism
 import ImagenCloudinaryRepository from "../core/restaurant/infraestructure/cloudinary/image.cloudinary.repository"
 import InsertEmployeeToRestaurant from "../core/restaurant/application/insert.employee.to.restaurant"
 import GetRestaurantById from "../core/restaurant/application/get.restaurant.by.id"
+import ListAllRestaurant from "../core/restaurant/application/list.all.restaurant"
 
 const insertRestaurant = new InsertRestaurant(new RestaurantPrismaRepository, new ImagenCloudinaryRepository)
 const insertEmployeeToRestaurant = new InsertEmployeeToRestaurant(new RestaurantPrismaRepository)
 const getRestaurantByIdentification = new GetRestaurantById(new RestaurantPrismaRepository)
+const listAllRestaurants = new ListAllRestaurant(new RestaurantPrismaRepository)
 
 export const createNewRestaurant = async (req: Request, res: Response) => {
     const {restaurantName, restaurantNIT, restaurantAddress, restaurantPhoneNumber, restaurantUrlLogo, ownerId} = req.body
@@ -68,6 +70,26 @@ export const getRestaurantById = async (req: Request, res: Response) => {
         res.status(400).json({
             status: 'Fail',
             message: 'The restaurant has not been found'
+        })
+    }
+}
+
+export const listRestaurant = async (req: Request, res: Response) => {
+    const { itemsPerPage } = req.params
+
+    try {
+        const listRestaurants = await listAllRestaurants.listRestaurants(parseInt(itemsPerPage))
+
+        res.status(200).json({
+            status: 'OK',
+            message: 'List of all restaurants per page',
+            data: listRestaurants
+        })
+    } catch (error:any) {
+        
+        res.status(400).json({
+            status: 'Fail',
+            message: error.message
         })
     }
 }

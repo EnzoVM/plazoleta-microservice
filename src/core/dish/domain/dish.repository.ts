@@ -7,4 +7,5 @@ export default interface DishRepository {
     updateDishById: (dishId: string, dishDescription: string, dishPrice: number) => Promise<Dish>
     getDishById: (dishId: string) => Promise<Dish | null>
     updateStateDishById: (dishId: string, dishActive: boolean) => Promise<Dish>
+    listDishesByRestaurantId: (restaurantId: string) => Promise<Dish[]>
 }

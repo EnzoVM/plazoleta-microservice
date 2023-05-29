@@ -5,10 +5,12 @@ import ImagenCloudinaryRepository from '../core/restaurant/infraestructure/cloud
 import UpdateDishById from '../core/dish/application/update.dish.by.id'
 import UpdateStateDishById from '../core/dish/application/update.state.dish.by.id'
 import { log } from 'console'
+import ListDishesByRestaurantId from '../core/dish/application/list.dishes.by.restaurantId'
 
 const insertDish = new InsertDish(new DishPrismaRepository, new ImagenCloudinaryRepository)
 const updateDishById = new UpdateDishById(new DishPrismaRepository)
 const updateStateDishById = new UpdateStateDishById(new DishPrismaRepository)
+const listDishesByRestaurantId = new ListDishesByRestaurantId(new DishPrismaRepository)
 
 export const createNewDish = async (req: Request, res: Response) => {
     const {dishName, categoryId, dishDescription, dishPrice, restaurantId, dishUrlImage} = req.body
@@ -73,3 +75,22 @@ export const updateStateDish = async (req: Request, res: Response) => {
     }
 }
 
+export const listDishesByRestaurant = async (req:Request, res: Response) => {
+    const { itemsPerPage, restaurantId } = req.params
+
+    try {
+        const listDishes = await listDishesByRestaurantId.listDishes(parseInt(itemsPerPage), restaurantId)
+
+        res.status(200).json({
+            status:'OK',
+            message:'List of dishes per page, category and restaurant',
+            data: listDishes
+        })
+    } catch (error:any) {
+        
+        res.status(400).json({
+            status: 'Fail',
+            message: error.message
+        })
+    }
+}

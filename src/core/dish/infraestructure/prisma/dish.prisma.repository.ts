@@ -60,4 +60,18 @@ export default class DishPrismaRepository implements DishRepository{
         return dishUpdate
     }
 
+    async listDishesByRestaurantId (restaurantId: string){
+        try {
+            const listDishes= await prisma.dishes.findMany({
+                where:{
+                    restaurantId
+                }
+            })
+
+            return listDishes
+        } catch (error:any) {
+            throw new Error('ERROR IN LIST DISHES PRISMA')
+        }
+    }
+
 }
