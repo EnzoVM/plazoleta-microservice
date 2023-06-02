@@ -1,14 +1,15 @@
 import { Request, Response } from "express"
 import InsertRestaurant  from "../core/restaurant/application/insert.restaurant"
-import RestaurantPrismaRepository from "../core/restaurant/infraestructure/prisma/restaurant.prisma.repository"
-import ImagenCloudinaryRepository from "../core/restaurant/infraestructure/cloudinary/image.cloudinary.repository"
-import InsertEmployeeToRestaurant from "../core/restaurant/application/insert.employee.to.restaurant"
-import GetRestaurantById from "../core/restaurant/application/get.restaurant.by.id"
+import GetRestaurantByRestaurantId from "../core/restaurant/application/get.restaurant.by.restaurant.id"
 import ListAllRestaurant from "../core/restaurant/application/list.all.restaurant"
 
-const insertRestaurant = new InsertRestaurant(new RestaurantPrismaRepository, new ImagenCloudinaryRepository)
-const insertEmployeeToRestaurant = new InsertEmployeeToRestaurant(new RestaurantPrismaRepository)
-const getRestaurantByIdentification = new GetRestaurantById(new RestaurantPrismaRepository)
+import RestaurantPrismaRepository from "../core/restaurant/infraestructure/prisma/restaurant.prisma.repository"
+import ImagenCloudinaryRepository from "../core/restaurant/infraestructure/cloudinary/image.cloudinary.repository"
+import RestaurantUuidRepository from "../core/restaurant/infraestructure/uuid/restaurant.uuid.repository"
+import UserServiceRepository from "../core/restaurant/infraestructure/services/user.service.repository"
+
+const insertRestaurant = new InsertRestaurant(new RestaurantPrismaRepository, new ImagenCloudinaryRepository, new RestaurantUuidRepository, new UserServiceRepository)
+const getRestaurantByRestaurantId = new GetRestaurantByRestaurantId(new RestaurantPrismaRepository)
 const listAllRestaurants = new ListAllRestaurant(new RestaurantPrismaRepository)
 
 export const createNewRestaurant = async (req: Request, res: Response) => {
@@ -32,32 +33,11 @@ export const createNewRestaurant = async (req: Request, res: Response) => {
     }
 }
 
-export const createEmployeeToRestaurant = async (req: Request, res: Response) => {
-    const {restaurantId, chefId } = req.body
-
-    try {
-        const newRestaurantEmployeeAdded = await insertEmployeeToRestaurant.insertEmployeeToRestaurant(restaurantId, chefId)
-
-        res.status(201).json({
-            status: 'OK',
-            message: 'Data is registered',
-            data: newRestaurantEmployeeAdded
-        })
-
-    } catch (error:any) {
-        
-        res.status(400).json({
-            status: 'Fail',
-            message: error.message
-        })
-    }
-}
-
 export const getRestaurantById = async (req: Request, res: Response) => {
     const { restaurantId } = req.params
 
     try {
-        const restaurantFound = await getRestaurantByIdentification.getRestaurantById(restaurantId)
+        const restaurantFound = await getRestaurantByRestaurantId.getRestaurantById(restaurantId)
 
         res.status(200).json({
             status: 'OK',
@@ -75,10 +55,10 @@ export const getRestaurantById = async (req: Request, res: Response) => {
 }
 
 export const listRestaurant = async (req: Request, res: Response) => {
-    const { itemsPerPage } = req.params
+    const { page, limit } = req.params
 
     try {
-        const listRestaurants = await listAllRestaurants.listRestaurants(parseInt(itemsPerPage))
+        const listRestaurants = await listAllRestaurants.listRestaurants(parseInt(page), parseInt(limit))
 
         res.status(200).json({
             status: 'OK',

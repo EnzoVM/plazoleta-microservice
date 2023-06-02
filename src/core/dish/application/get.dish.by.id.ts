@@ -1,14 +1,24 @@
-import DishRepository from "../domain/dish.repository";
+import DishPersistanceRepository from "../domain/dish.persistance.repository"
 
 export default class GetDishById {
-    private readonly dishRepository: DishRepository
+    private readonly dishPersistanceRepository: DishPersistanceRepository
 
-    constructor(dishRepository: DishRepository) {
-        this.dishRepository = dishRepository
+    constructor(dishPersistanceRepository: DishPersistanceRepository) {
+        this.dishPersistanceRepository = dishPersistanceRepository
     }
 
     async getDishById (dishId: string) {
-        const dishFound = await this.dishRepository.getDishById(dishId)
-        return dishFound
+        try {
+            const dishFound = await this.dishPersistanceRepository.getDishById(dishId)
+        
+            if(!dishFound){
+                throw new Error('The dish does not exit')
+            }
+
+            return dishFound
+
+        } catch (error: any) {
+            throw new Error(error.message)
+        }
     }
 }

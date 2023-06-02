@@ -1,33 +1,54 @@
-import Dish from "../domain/dish.model";
-import DishRepository from "../domain/dish.repository";
+import Dish from "../domain/dish.model"
 import {validate} from 'class-validator'
 import DishDTO from "../domain/dish.dto"
-import ImageUploadRepository from "../domain/image.upload.repository";
+import DishPersistanceRepository from "../domain/dish.persistance.repository"
+import ImageUploadRepository from "../domain/image.upload.repository"
+import DishIdGeneratorRepository from "../domain/dish.id.generator.repository"
 
 export default class InsertDish {
-    private readonly dishRepository: DishRepository
+    private readonly dishPersistanceRepository: DishPersistanceRepository
     private readonly imageUploadRepository: ImageUploadRepository
+    private readonly dishIdGenerateRepository: DishIdGeneratorRepository
 
-    constructor(dishRepository: DishRepository, imageUploadRepository: ImageUploadRepository) {
-        this.dishRepository = dishRepository 
-        this.imageUploadRepository = imageUploadRepository       
+    constructor(dishPersistanceRepository: DishPersistanceRepository, imageUploadRepository: ImageUploadRepository, dishIdGenerateRepository: DishIdGeneratorRepository) {
+        this.dishPersistanceRepository = dishPersistanceRepository,
+        this.imageUploadRepository = imageUploadRepository,
+        this.dishIdGenerateRepository = dishIdGenerateRepository      
     }
 
     async createDish (dishName: string, categoryId: string, dishDescription: string, dishPrice: number, restaurantId: string, dishUrlImage: string) {
+        try {
+            const errorDataDish = await validate(new DishDTO({
+                dishName, 
+                categoryId, 
+                dishDescription, 
+                dishPrice, 
+                restaurantId, 
+                dishUrlImage
+            }))
+            if(errorDataDish.length > 0){
+                const errorMessages = errorDataDish.map((error) => error.constraints ? Object.values(error.constraints): []).flat()
+                throw new Error(errorMessages.join(', '))
+            }
+            
+            const dishId = this.dishIdGenerateRepository.generateDishId()
+            const dishUrlImageUpload = await this.imageUploadRepository.uploadImage(dishUrlImage)
+            
+            const newDish = new Dish({
+                dishId: dishId, 
+                dishName: dishName, 
+                categoryId: categoryId, 
+                dishDescription: dishDescription, 
+                dishPrice: dishPrice, 
+                restaurantId: restaurantId, 
+                dishUrlImage: dishUrlImageUpload, 
+                dishActive: true
+            })
+            const dishInserted = await this.dishPersistanceRepository.insertDish(newDish)
+            return dishInserted 
 
-        if(!dishName || !categoryId || !dishDescription || !dishPrice || !restaurantId || !dishUrlImage){
-            throw new Error('Data is missing')
+        } catch (error: any) {
+            throw new Error(error.message)
         }
-
-        const errorDataDish = await validate(new DishDTO(dishName, categoryId, dishDescription, dishPrice, restaurantId, dishUrlImage))
-        if(errorDataDish.length > 0){
-            throw new Error('The dish data entered is not correct')
-        }
-
-        const dishUrlImageUpload = await this.imageUploadRepository.uploadImage(dishUrlImage)
-
-        const newDish = new Dish(dishName, categoryId, dishDescription, dishPrice, restaurantId, dishUrlImageUpload, true)
-        const dishInserted = await this.dishRepository.insertDish(newDish)
-        return dishInserted
     }
 }

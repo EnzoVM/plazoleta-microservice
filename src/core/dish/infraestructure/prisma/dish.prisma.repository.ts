@@ -1,66 +1,84 @@
-import { log } from "console";
-import prisma from "../../../../connections/prisma.connection";
-import Dish from "../../domain/dish.model";
-import DishRepository from "../../domain/dish.repository";
+import prisma from "../../../../connections/prisma.connection"
+import Dish from "../../domain/dish.model"
+import DishPersistanceRepository from "../../domain/dish.persistance.repository"
 
-
-export default class DishPrismaRepository implements DishRepository{
+export default class DishPrismaRepository implements DishPersistanceRepository{
     
-    async insertDish (dish: Dish) {
-        const dishSaved = await prisma.dishes.create({
-            data: {
-                dishId: dish.dishId,
-                dishName: dish.dishName,
-                categoryId: dish.categoryId,
-                dishDescription: dish.dishDescription,
-                dishPrice: dish.dishPrice,
-                restaurantId: dish.restaurantId,
-                dishUrlImage: dish.dishUrlImage,
-                dishActive: dish.dishActive
-            }
-        })
+    async insertDish (dish: Dish): Promise<Dish> {
+        try {
+            const dishSaved = await prisma.dishes.create({
+                data: {
+                    dishId: dish.dishId,
+                    dishName: dish.dishName,
+                    categoryId: dish.categoryId,
+                    dishDescription: dish.dishDescription,
+                    dishPrice: dish.dishPrice,
+                    restaurantId: dish.restaurantId,
+                    dishUrlImage: dish.dishUrlImage,
+                    dishActive: dish.dishActive
+                }
+            })
+    
+            return dishSaved
 
-        return dishSaved
+        } catch (error:any) {
+            throw new Error('ERROR IN CREATE DISH')
+        }
     }
 
-    async updateDishById (dishId: string, dishDescription: string, dishPrice: number) {
-        const dishUpdated = await prisma.dishes.update({
-            where: {
-                dishId
-            },
-            data: {
-                dishDescription,
-                dishPrice
-            }
-        })
+    async updateDishById (dishId: string, dishDescription: string, dishPrice: number): Promise<Dish> {
+        try {
+            const dishUpdated = await prisma.dishes.update({
+                where: {
+                    dishId
+                },
+                data: {
+                    dishDescription,
+                    dishPrice
+                }
+            })
+    
+            return dishUpdated
 
-        return dishUpdated
+        } catch (error:any) {
+            throw new Error('ERROR IN UPDATE DISH')
+        }
     }
 
-    async getDishById (dishId: string) {
-        const dishFound = await prisma.dishes.findUnique({
-            where:{
-                dishId
-            }
-        })
+    async getDishById (dishId: string): Promise<Dish | null> {
+        try {
+            const dishFound = await prisma.dishes.findUnique({
+                where:{
+                    dishId
+                }
+            })
+            
+            return dishFound
 
-        return dishFound
+        } catch (error:any) {
+            throw new Error('ERROR IN GET DISH BY ID')
+        } 
     }
 
-    async updateStateDishById (dishId: string, dishActive: boolean) {
-        const dishUpdate = await prisma.dishes.update({
-            where: {
-                dishId
-            },
-            data: {
-                dishActive
-            }
-        })
-        
-        return dishUpdate
+    async updateStateDishById (dishId: string, dishActive: boolean): Promise<Dish> {
+        try {
+            const dishUpdate = await prisma.dishes.update({
+                where: {
+                    dishId
+                },
+                data: {
+                    dishActive
+                }
+            })
+            
+            return dishUpdate
+
+        } catch (error:any) {
+            throw new Error('ERROR IN UPDATE STATE OF DISH');
+        }
     }
 
-    async listDishesByRestaurantId (restaurantId: string){
+    async listDishesByRestaurantId (restaurantId: string): Promise<Dish[]> {
         try {
             const listDishes= await prisma.dishes.findMany({
                 where:{
@@ -69,9 +87,9 @@ export default class DishPrismaRepository implements DishRepository{
             })
 
             return listDishes
+
         } catch (error:any) {
-            throw new Error('ERROR IN LIST DISHES PRISMA')
+            throw new Error('ERROR IN LIST DISHES BY RESTAURANT')
         }
     }
-
 }

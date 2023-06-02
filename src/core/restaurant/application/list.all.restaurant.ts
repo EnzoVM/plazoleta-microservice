@@ -1,33 +1,31 @@
-import RestaurantRepository from "../domain/restaurant.repository";
-
+import RestaurantPersistanceRepository from "../domain/restaurant.persistance.repository";
 
 export default class ListAllRestaurant {
-    private readonly restaurantRepository: RestaurantRepository
+    private readonly restaurantPersistanceRepository: RestaurantPersistanceRepository
 
-    constructor(restaurantRepository: RestaurantRepository) {
-        this.restaurantRepository = restaurantRepository
+    constructor(restaurantPersistanceRepository: RestaurantPersistanceRepository) {
+        this.restaurantPersistanceRepository = restaurantPersistanceRepository
     }
 
-    async listRestaurants (itemsPerPage: number) {
-        const listAllRestaurants = await this.restaurantRepository.listAllRestaurants()
-        const leakedRestaurants = listAllRestaurants.map((restaurant) => {
-            return {
-                restaurantName: restaurant.restaurantName, 
-                restaurantUrlLogo: restaurant.restaurantUrlLogo
-            }})
+    async listRestaurants (page: number, limit: number) {
+        try {
+            const listAllRestaurants = await this.restaurantPersistanceRepository.listAllRestaurants()
+            const leakedRestaurants = listAllRestaurants.map((restaurant) => {
+                return {
+                    restaurantName: restaurant.restaurantName, 
+                    restaurantUrlLogo: restaurant.restaurantUrlLogo
+                }})
 
-        const numOfpages = Math.ceil(leakedRestaurants.length/itemsPerPage)
+            const orderedRestaurants = leakedRestaurants.sort((a, b) => a.restaurantName.localeCompare(b.restaurantName))
 
-        const orderedRestaurants = leakedRestaurants.sort((a, b) => a.restaurantName.localeCompare(b.restaurantName))
-        const listRestaurantsPerPage: {}[] = []
+            const startIndex = (page-1) * limit
+            const endIndex = page * limit
 
-        for(let page=1; page <=numOfpages; page++){
-            const firstItemOfPage = (page-1)*itemsPerPage
-            const lastItemOfPage = firstItemOfPage + itemsPerPage
+            const listRestaurant = orderedRestaurants.slice(startIndex, endIndex)
+            return listRestaurant
 
-            const listRestaurant = orderedRestaurants.slice(firstItemOfPage, lastItemOfPage)
-            listRestaurantsPerPage.push(listRestaurant)
+        } catch (error: any) {
+            throw new Error(error.message)
         }
-        return listRestaurantsPerPage
     }
 }

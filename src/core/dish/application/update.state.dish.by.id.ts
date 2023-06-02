@@ -1,21 +1,23 @@
-import { log } from "console";
-import DishRepository from "../domain/dish.repository";
-
+import DishPersistanceRepository from "../domain/dish.persistance.repository";
 
 export default class UpdateStateDishById {
-    private readonly dishRepository: DishRepository
+    private readonly dishPersistanceRepository: DishPersistanceRepository
 
-    constructor(dishRepository: DishRepository) {
-        this.dishRepository = dishRepository
+    constructor(dishPersistanceRepository: DishPersistanceRepository) {
+        this.dishPersistanceRepository = dishPersistanceRepository
     }
 
     async changeStateDish (dishId: string, dishActive: boolean) {
+        try {
+            if(dishActive === undefined){
+                throw new Error('State is missing')
+            }
+    
+            const dishUpdate = await this.dishPersistanceRepository.updateStateDishById(dishId, dishActive)    
+            return dishUpdate
 
-        if(dishActive === undefined){
-            throw new Error('Data is missing')
+        } catch (error: any) {
+            throw new Error(error.message)
         }
-
-        const dishUpdate = await this.dishRepository.updateStateDishById(dishId, dishActive)    
-        return dishUpdate
     }
 }

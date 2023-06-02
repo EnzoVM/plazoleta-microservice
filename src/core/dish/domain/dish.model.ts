@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid'
 
 export default class Dish {
     dishId: string
@@ -10,8 +9,8 @@ export default class Dish {
     dishUrlImage: string
     dishActive: boolean
     
-    constructor(dishName: string, categoryId: string, dishDescription: string, dishPrice: number, restaurantId: string, dishUrlImage: string, dishActive: boolean) {
-        this.dishId = uuid(),
+    constructor({dishId, dishName, categoryId, dishDescription, dishPrice, restaurantId, dishUrlImage, dishActive}:{dishId: string, dishName: string, categoryId: string, dishDescription: string, dishPrice: number, restaurantId: string, dishUrlImage: string, dishActive: boolean}) {
+        this.dishId = dishId,
         this.dishName = dishName,
         this.categoryId = categoryId,
         this.dishDescription = dishDescription,

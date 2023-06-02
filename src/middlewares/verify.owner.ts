@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
-import GetRestaurantById from '../core/restaurant/application/get.restaurant.by.id'
+import GetRestaurantById from '../core/restaurant/application/get.restaurant.by.restaurant.id'
 import RestaurantPrismaRepository from '../core/restaurant/infraestructure/prisma/restaurant.prisma.repository'
 import GetDishById from '../core/dish/application/get.dish.by.id'
 import DishPrismaRepository from '../core/dish/infraestructure/prisma/dish.prisma.repository'
@@ -36,12 +36,15 @@ export const verifyOwnerRole = async (req: Request, res: Response, next: NextFun
                     message: 'Data is missing'
                 })
             }
+
             const restaurantFound = await getRestaurantById.getRestaurantById(restaurantId)
+
             if(!restaurantFound){
                 return res.status(404).json({
                     message: 'The restaurant id entered does not exist'
                 })
             }
+
             if(decodedToken.userId !== restaurantFound.ownerId){
                 return res.status(403).json({
                     message: 'Access denied. This restaurant is not assigned to this owner'
@@ -51,17 +54,14 @@ export const verifyOwnerRole = async (req: Request, res: Response, next: NextFun
 
         if(req.method === 'PUT') {
             const dishFound = await getDishById.getDishById(dishId)
-            if(!dishFound){
-                return res.status(404).json({
-                    message: 'The dish id entered does not exist'
-                })
-            }
             const restaurantFound = await getRestaurantById.getRestaurantById(dishFound.restaurantId)
+
             if(!restaurantFound){
                 return res.status(404).json({
                     message: 'The restaurant id entered does not exist'
                 })
             }
+
             if(decodedToken.userId !== restaurantFound.ownerId){
                 return res.status(403).json({
                     message: 'Access denied. This restaurant is not assigned to this owner'
@@ -70,10 +70,11 @@ export const verifyOwnerRole = async (req: Request, res: Response, next: NextFun
         }
   
         next()
+
     } catch (error:any) {
         
         return res.status(401).json({
-            message: 'Invalid token'
+            message: error.message
         })
     }
 }
