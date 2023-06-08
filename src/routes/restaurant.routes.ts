@@ -1,12 +1,12 @@
 import { Router } from "express"
-import { createNewRestaurant, createEmployeeToRestaurant, getRestaurantById} from "../controllers/restaurant.controller"
-import { verifyAdministratorRole } from "../middlewares/verify.administrator"
+import { createNewRestaurant, getRestaurantById, listRestaurant} from "../controllers/restaurant.controller"
+import { verifyUserRole } from "../middlewares/verify.user.role"
 
 const restaurantRouter = Router()
 
 restaurantRouter
     .get('/:restaurantId', getRestaurantById)
-    .post('/create', verifyAdministratorRole ,createNewRestaurant)
-    .post('/createEmployeeRestaurant', createEmployeeToRestaurant)
+    .get('/list/:page/:limit', listRestaurant)
+    .post('/create', verifyUserRole('Administrator'),createNewRestaurant)
 
 export default restaurantRouter

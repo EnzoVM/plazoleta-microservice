@@ -15,11 +15,11 @@ model Orders {
   clientId            String              @db.VarChar(255)
   orderDate           DateTime            @default(now())
   orderState          String              @db.VarChar(255)
-  chefId              String
+  chefId              String?
   restaurantId        String
   orderDishes         OrderDishes[]
   restaurant          Restaurant          @relation(fields: [restaurantId], references: [restaurantId])
-  restaurantEmployee  RestaurantEmployee  @relation(fields: [chefId], references: [chefId])
+  restaurantEmployee  RestaurantEmployee? @relation(fields: [chefId], references: [chefId])
 }
 
 model RestaurantEmployee {

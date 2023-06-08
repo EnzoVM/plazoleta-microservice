@@ -1,4 +1,5 @@
 import {
+IsNotEmpty,
 IsNumber, 
 IsNumberString, 
 IsString, 
@@ -8,29 +9,35 @@ MaxLength} from 'class-validator'
 
 export default class RestaurantDTO {
 
-    @IsString()
-    @Matches(/^[a-zA-Z0-9]*[a-zA-Z][a-zA-Z0-9]*$/, {message: 'La variable no puede ser solo números'})
+    @IsNotEmpty({message: 'Name of restaurant is empty'})
+    @IsString({message: 'Name of restaurant must be a string'})
+    @Matches(/^[a-zA-Z0-9]*[a-zA-Z][a-zA-Z0-9]*$/, {message: 'Name of the restaurant can not be just numbers'})
     restaurantName: string
 
-    @IsNumber()
+    @IsNotEmpty({message: 'Identification of restaurant is empty'})
+    @IsNumber({}, {message: 'Identification of restaurant must be an integer'})
     restaurantNIT: number
 
-    @IsString()
+    @IsNotEmpty({message: 'Address of restaurant is empty'})
+    @IsString({message: 'Address of restaurant must be a string'})
     restaurantAddress: string
 
-    @IsNumberString({}, {message: 'El valor ingresado debe de ser un numero'})
-    @MaxLength(13, {message: 'El número ingresado es muy largo, solo se permite 13 caracteres'})
-    @Matches(/^(\+)?\d+$/, {message: 'El valor debe de ser númerico y puede incluir el símbolo "+" al inicio'})
+    @IsNotEmpty({message: 'Phone number of restaurant is empty'})
+    @IsNumberString({}, {message: 'Phone number of restaurant must be an integer'})
+    @MaxLength(13, {message: 'Phone number of restaurant is very long, only 13 characters are allowed'})
+    @Matches(/^(\+)?\d+$/, {message: 'Phone number of restaurant must be numeric and can include the + symbol at the beginning'})
     restaurantPhoneNumber: string
 
-    @IsUrl()
-    @IsString()
+    @IsNotEmpty({message: 'Url logo of restaurant is empty'})
+    @IsUrl({}, {message: 'Url logo of restaurant validate is wrong'})
+    @IsString({message: 'Url logo of restaurant must be a string'})
     restaurantUrlLogo: string
 
-    @IsString()
+    @IsNotEmpty({message: 'Owner ID is empty'})
+    @IsString({message: 'Owner ID must be a string'})
     ownerId: string
 
-    constructor(restaurantName: string, restaurantNIT: number, restaurantAddress: string, restaurantPhoneNumber: string, restaurantUrlLogo: string, ownerId: string){
+    constructor({restaurantName, restaurantNIT, restaurantAddress, restaurantPhoneNumber, restaurantUrlLogo, ownerId}:{restaurantName: string, restaurantNIT: number, restaurantAddress: string, restaurantPhoneNumber: string, restaurantUrlLogo: string, ownerId: string}){
         this.restaurantName = restaurantName,
         this.restaurantNIT = restaurantNIT,
         this.restaurantAddress = restaurantAddress,

@@ -1,4 +1,14 @@
-
+//Params
+const itemsPerPage = {
+    name: 'itemsPerPage',
+    in: 'path',
+    required: true,
+    schema: {
+      type: 'string'
+    },
+    description: 'This is items per page',
+    example: '5'
+}
 
 //EndPoints
 const createRestaurant = {
@@ -64,7 +74,7 @@ const createRestaurant = {
             content: {
                 'application/json': {
                     schema: {
-                        $ref: '#/components/schemas/responseCreateRestaurant'
+                        $ref: '#/components/schemas/responseForCreateRestaurant'
                     }
                 }
             }
@@ -72,6 +82,26 @@ const createRestaurant = {
     }
 }
 
+const listRestaurantsByPage = {
+    tags: ['Restaurant'],
+    summary: 'List restaurants by page',
+    description: 'This endpoint is for list restaurants according to the items by pages',
+    parameters: [
+        itemsPerPage
+    ],
+    responses: {
+        '200': {
+            description: 'Results of list restaurants per page',
+            content: {
+                'application/json': {
+                    schema: {
+                        $ref: '#/components/schemas/responseForListRestaurantsPerPage'
+                    }
+                }
+            }
+        }
+    }
+}
 
 //Schemas
 const tokenForCreateRestaurant = {
@@ -81,7 +111,7 @@ const tokenForCreateRestaurant = {
     example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3MTYyMjM3NjYzNTU2NDk0NjQ5IiwidXNlclJvbGUiOiJBZG1pbmlzdHJhdG9yIiwiaWF0IjoxNjg0ODAwNTgwfQ.2XyADUiWdkhUySKHMl9VwBKoVNe-usyQqKCxBy51ZX4'
 }
 
-const responseCreateRestaurant = {
+const responseForCreateRestaurant = {
     type: 'object',
     properties: {
         status: {
@@ -113,7 +143,74 @@ const responseCreateRestaurant = {
     }
 }
 
-export {tokenForCreateRestaurant, createRestaurant, responseCreateRestaurant}
+const responseForListRestaurantsPerPage = {
+    type: 'object',
+    properties: {
+        status: {
+            type: 'string',
+            description: 'State code of the response',
+            require: true,
+            example: 'OK'
+        },
+        message: {
+            type: 'string',
+            description: 'Message of the response',
+            require: true,
+            example: 'List of all restaurants per page'
+        },
+        data: {
+            type: 'array',
+            description: 'Data of the response',
+            require: true,
+            example: [
+                [
+                    {
+                        restaurantName: "abc",
+                        restaurantUrlLogo: "https://res.cloudinary.com/enzogvm/image/upload/v1685123863/zeb3ktp24bkjs9htb6fc.jpg"
+                    },
+                    {
+                        restaurantName: "r12345",
+                        restaurantUrlLogo: "urlejemplo"
+                    },
+                    {
+                        restaurantName: "r12345",
+                        restaurantUrlLogo: "https://res.cloudinary.com/enzogvm/image/upload/v1684445265/drjmzhlgqazxyyinrrfz.jpg"
+                    }
+                ],
+                [
+                    {
+                        restaurantName: "r12345",
+                        restaurantUrlLogo: "https://res.cloudinary.com/enzogvm/image/upload/v1684447279/e0tzijpf2bd5lcgyhck1.jpg"
+                    },
+                    {
+                        restaurantName: "r12345",
+                        restaurantUrlLogo: "https://res.cloudinary.com/enzogvm/image/upload/v1684445209/ndf5yx11ngcphkkxnine.jpg"
+                    },
+                    {
+                        restaurantName: "r12345",
+                        restaurantUrlLogo: "urlejemplo"
+                    }
+                ],
+                [
+                    {
+                        restaurantName: "RestauranNuevo2000",
+                        restaurantUrlLogo: "https://res.cloudinary.com/enzogvm/image/upload/v1684813922/s7dge1liyckdw8ncos5z.jpg"
+                    },
+                    {
+                        restaurantName: "RestauranNuevo2000",
+                        restaurantUrlLogo: "https://res.cloudinary.com/enzogvm/image/upload/v1684813953/dnyfcrhpn0nppjjmoami.jpg"
+                    },
+                    {
+                        restaurantName: "RestauranNuevoPrueba2000",
+                        restaurantUrlLogo: "https://res.cloudinary.com/enzogvm/image/upload/v1685038699/v5wranqrdun3whpifm8f.jpg"
+                    }
+                ]
+            ] 
+        }
+    }
+}
+
+export {tokenForCreateRestaurant, createRestaurant, responseForCreateRestaurant, listRestaurantsByPage, responseForListRestaurantsPerPage}
 
 
 

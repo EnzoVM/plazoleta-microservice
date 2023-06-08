@@ -1,6 +1,19 @@
 import swaggerJSDoc, {OAS3Definition, OAS3Options} from "swagger-jsdoc";
-import {tokenForCreateRestaurant, createRestaurant, responseCreateRestaurant} from './restaurant.docs'
-import {tokenForCreateAndUpdateDish, createDish, responseCreateDish, updateDish, responseUpdateDish} from "./dish.docs";
+import {
+tokenForCreateRestaurant, 
+createRestaurant, 
+responseForCreateRestaurant,
+listRestaurantsByPage,
+responseForListRestaurantsPerPage} from './restaurant.docs'
+import {
+tokenForCreateAndUpdateDish, 
+createDish, 
+responseForCreateDish, 
+updateDish, 
+responseForUpdateDish, 
+updateStateDish,
+listDishesByPage,
+responseForListDishesPerPage} from "./dish.docs";
 
 const swaggerDefinition: OAS3Definition = {
     openapi: '3.0.0',
@@ -24,14 +37,23 @@ const swaggerDefinition: OAS3Definition = {
         }
     ],
     paths: {
+        '/api/v1/restaurants/{itemsPerPage}':{
+            get: listRestaurantsByPage
+        },
         '/api/v1/restaurants/create':{
             post: createRestaurant
+        },
+        '/api/v1/dishes/{itemsPerPage}/{restaurantId}': {
+            get: listDishesByPage
         },
         '/api/v1/dishes/create': {
             post: createDish
         },
         '/api/v1/dishes/update/{dishId}': {
             put: updateDish
+        },
+        '/api/v1/dishes/update/state/{dishId}': {
+            put: updateStateDish
         }
     },
     components: {
@@ -40,9 +62,11 @@ const swaggerDefinition: OAS3Definition = {
             tokenForCreateAndUpdateDish
         },
         schemas:{
-            responseCreateRestaurant,
-            responseCreateDish,
-            responseUpdateDish
+            responseForCreateRestaurant,
+            responseForListRestaurantsPerPage,
+            responseForCreateDish,
+            responseForUpdateDish,
+            responseForListDishesPerPage
         }   
     }
 }

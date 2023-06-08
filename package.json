@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "tsc && node build/index.js",
+    "start": "tsc && node build/src/index.js",
     "dev": "ts-node-dev src/index.ts",
-    "lint": "eslint .",
-    "test": "jest --detectOpenHandles"
+    "test:unit": "jest tests/unit/* --detectOpenHandles --coverage",
+    "test:integration": "jest tests/integration/* --detectOpenHandles --coverage"
   },
   "keywords": [],
   "author": "",
@@ -28,11 +28,13 @@
   },
   "dependencies": {
     "@prisma/client": "4.14.1",
-    "axios": "^1.4.0",
+    "axios": "1.4.0",
     "class-validator": "0.14.0",
-    "cloudinary": "^1.37.0",
+    "cloudinary": "1.37.0",
+    "cors": "2.8.5",
+    "dotenv": "16.1.4",
     "express": "4.18.2",
-    "jsonwebtoken": "^9.0.0",
+    "jsonwebtoken": "9.0.0",
     "morgan": "1.10.0",
     "prisma": "4.14.1",
     "swagger-jsdoc": "6.2.8",

@@ -1,27 +1,34 @@
 import { validate } from "class-validator";
-import DishRepository from "../domain/dish.repository";
+import DishPersistanceRepository from "../domain/dish.persistance.repository";
 import DishDTO from "../domain/dish.dto";
 
-
 export default class UpdateDishById {
-    private readonly dishRepository: DishRepository
+    private readonly dishPersistanceRepository: DishPersistanceRepository
 
-    constructor(dishRepository: DishRepository) {
-        this.dishRepository = dishRepository
+    constructor(dishPersistanceRepository: DishPersistanceRepository) {
+        this.dishPersistanceRepository = dishPersistanceRepository
     }
 
     async updateDish (dishId: string, dishDescription: string, dishPrice: number) {
-        
-        if(!dishId || !dishDescription || !dishPrice){
-            throw new Error('Data is missing')
-        }
-        
-        const errorDataDish = await validate(new DishDTO("", "", dishDescription, dishPrice, "", ""), {groups: ['partialValidation']})
-        if(errorDataDish.length > 0){
-            throw new Error('The description or price entered are incorrect')
-        }
+        try {     
+            //@ts-ignore
+            const errorDataDish = await validate(new DishDTO({
+                dishDescription: dishDescription, 
+                dishPrice: dishPrice
+            }), {groups: ['partialValidation']})
+            if(errorDataDish.length > 0){
+                const errorMessages = errorDataDish.map((error) => error.constraints ? Object.values(error.constraints): []).flat()
+                throw new Error(errorMessages.join(', '))
+            }
+    
+            const dishUpdated = await this.dishPersistanceRepository.updateDishById(dishId, dishDescription, dishPrice)
+            if(!dishUpdated){
+                throw new  Error('Dish not found')
+            }
+            return dishUpdated
 
-        const dishUpdated = await this.dishRepository.updateDishById(dishId, dishDescription, dishPrice)
-        return dishUpdated
+        } catch (error: any) {
+            throw new Error(error.message)
+        }
     }
 }
