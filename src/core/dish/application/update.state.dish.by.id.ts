@@ -13,7 +13,10 @@ export default class UpdateStateDishById {
                 throw new Error('State is missing')
             }
     
-            const dishUpdate = await this.dishPersistanceRepository.updateStateDishById(dishId, dishActive)    
+            const dishUpdate = await this.dishPersistanceRepository.updateStateDishById(dishId, dishActive)
+            if(!dishUpdate){
+                throw new Error('Dish not found')
+            }   
             return dishUpdate
 
         } catch (error: any) {

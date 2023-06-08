@@ -2,17 +2,17 @@ import Dish from "../domain/dish.model"
 import {validate} from 'class-validator'
 import DishDTO from "../domain/dish.dto"
 import DishPersistanceRepository from "../domain/dish.persistance.repository"
-import ImageUploadRepository from "../domain/image.upload.repository"
+import DishImageUploadRepository from "../domain/dish.image.upload.repository"
 import DishIdGeneratorRepository from "../domain/dish.id.generator.repository"
 
 export default class InsertDish {
     private readonly dishPersistanceRepository: DishPersistanceRepository
-    private readonly imageUploadRepository: ImageUploadRepository
+    private readonly dishImageUploadRepository: DishImageUploadRepository
     private readonly dishIdGenerateRepository: DishIdGeneratorRepository
 
-    constructor(dishPersistanceRepository: DishPersistanceRepository, imageUploadRepository: ImageUploadRepository, dishIdGenerateRepository: DishIdGeneratorRepository) {
+    constructor(dishPersistanceRepository: DishPersistanceRepository, dishImageUploadRepository: DishImageUploadRepository, dishIdGenerateRepository: DishIdGeneratorRepository) {
         this.dishPersistanceRepository = dishPersistanceRepository,
-        this.imageUploadRepository = imageUploadRepository,
+        this.dishImageUploadRepository = dishImageUploadRepository,
         this.dishIdGenerateRepository = dishIdGenerateRepository      
     }
 
@@ -32,7 +32,7 @@ export default class InsertDish {
             }
             
             const dishId = this.dishIdGenerateRepository.generateDishId()
-            const dishUrlImageUpload = await this.imageUploadRepository.uploadImage(dishUrlImage)
+            const dishUrlImageUpload = await this.dishImageUploadRepository.uploadImage(dishUrlImage)
             
             const newDish = new Dish({
                 dishId: dishId, 

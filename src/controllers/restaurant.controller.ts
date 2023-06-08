@@ -4,11 +4,11 @@ import GetRestaurantByRestaurantId from "../core/restaurant/application/get.rest
 import ListAllRestaurant from "../core/restaurant/application/list.all.restaurant"
 
 import RestaurantPrismaRepository from "../core/restaurant/infraestructure/prisma/restaurant.prisma.repository"
-import ImagenCloudinaryRepository from "../core/restaurant/infraestructure/cloudinary/image.cloudinary.repository"
+import RestaurantImagenCloudinaryRepository from "../core/restaurant/infraestructure/cloudinary/restaurant.image.cloudinary.repository"
 import RestaurantUuidRepository from "../core/restaurant/infraestructure/uuid/restaurant.uuid.repository"
 import UserServiceRepository from "../core/restaurant/infraestructure/services/user.service.repository"
 
-const insertRestaurant = new InsertRestaurant(new RestaurantPrismaRepository, new ImagenCloudinaryRepository, new RestaurantUuidRepository, new UserServiceRepository)
+const insertRestaurant = new InsertRestaurant(new RestaurantPrismaRepository, new RestaurantImagenCloudinaryRepository, new RestaurantUuidRepository, new UserServiceRepository)
 const getRestaurantByRestaurantId = new GetRestaurantByRestaurantId(new RestaurantPrismaRepository)
 const listAllRestaurants = new ListAllRestaurant(new RestaurantPrismaRepository)
 

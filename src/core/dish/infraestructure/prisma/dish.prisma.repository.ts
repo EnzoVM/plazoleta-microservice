@@ -26,7 +26,7 @@ export default class DishPrismaRepository implements DishPersistanceRepository{
         }
     }
 
-    async updateDishById (dishId: string, dishDescription: string, dishPrice: number): Promise<Dish> {
+    async updateDishById (dishId: string, dishDescription: string, dishPrice: number): Promise<Dish | null> {
         try {
             const dishUpdated = await prisma.dishes.update({
                 where: {
@@ -60,7 +60,7 @@ export default class DishPrismaRepository implements DishPersistanceRepository{
         } 
     }
 
-    async updateStateDishById (dishId: string, dishActive: boolean): Promise<Dish> {
+    async updateStateDishById (dishId: string, dishActive: boolean): Promise<Dish | null> {
         try {
             const dishUpdate = await prisma.dishes.update({
                 where: {
@@ -78,7 +78,7 @@ export default class DishPrismaRepository implements DishPersistanceRepository{
         }
     }
 
-    async listDishesByRestaurantId (restaurantId: string): Promise<Dish[]> {
+    async listDishesByRestaurantId (restaurantId: string): Promise<Dish[] | null> {
         try {
             const listDishes= await prisma.dishes.findMany({
                 where:{

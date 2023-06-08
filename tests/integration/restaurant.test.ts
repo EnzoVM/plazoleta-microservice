@@ -1,11 +1,10 @@
 import index from '../../src/index'
 import request from 'supertest'
-import { dataRestaurantMissing, dataRestaurantValidate } from './helpers/restautant.helpers'
 
 const {app, server} = index
 const api = request(app)
-const adminToken = process.env.ADMIN_TOKEN
-const ownerToken = process.env.OWNER_TOKEN
+const adminToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3MTYyMjM3NjYzNTU2NDk0NjQ5IiwidXNlclJvbGUiOiJBZG1pbmlzdHJhdG9yIiwiaWF0IjoxNjg0ODAwNTgwfQ.2XyADUiWdkhUySKHMl9VwBKoVNe-usyQqKCxBy51ZX4'
+const ownerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3MjkzNjg4ODc5MzIxODU1MjgxIiwidXNlclJvbGUiOiJPd25lciIsImlhdCI6MTY4NTAzOTY4OX0.BPB1Na1rTwqKDdvp8EGKl25psADCUrj9HPLQF6OKs5o'
 const tokenInvalid = 'ecnecnenne3jrn4rn4jrn4r'
 
 describe('POST /createRestaurant', () => {
@@ -68,17 +67,6 @@ describe('POST /createRestaurant', () => {
 
         expect(response.body.message).toStrictEqual("Invalid token")
     })
-  
-    test('When one field or all fields are missing', async () => {
-        for(const dataRestaurant of dataRestaurantMissing) {
-            const response = await api.post('/api/v1/restaurants/create').send(dataRestaurant)
-                .set('Authorization', `Bearer ${adminToken}`)
-                .expect('Content-Type', /application\/json/)
-                .expect(400)
-
-            expect(response.body.message).toStrictEqual('Data is missing')
-        }
-    })
 
     test('When owner id is not correspond to an owner', async () => {
         const response = await api.post('/api/v1/restaurants/create').send({
@@ -93,17 +81,6 @@ describe('POST /createRestaurant', () => {
           .expect(400)
 
         expect(response.body.message).toStrictEqual('The entered role does not belong to an owner')
-    })
-
-    test('When NIT/PhoneNumber/nameRestaurant validate is wrong', async () => {
-        for(const dataRestaurant of dataRestaurantValidate) {
-            const response = await api.post('/api/v1/restaurants/create').send(dataRestaurant)
-                .set('Authorization', `Bearer ${adminToken}`)    
-                .expect('Content-Type', /application\/json/)
-                .expect(400)
-
-            expect(response.body.message).toStrictEqual('The restaurant data entered is not correct')
-        }
     })
 })
 

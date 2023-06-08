@@ -27,4 +27,52 @@ describe('Update Dish By Id', () => {
         expect(dishUpdated.dishDescription).toStrictEqual("Esta es la descripción de un plato cambiada para pruebas unitarias")
         expect(dishUpdated.dishPrice).toBe(200)
     })
+
+
+    test('When description is missing', async () => {
+        const dishPrismaRepository = new DishPrismaRepository()
+
+        const updateDishById = new UpdateDishById(dishPrismaRepository)
+
+        //Description is missing
+        //@ts-ignore
+        await expect(updateDishById.updateDish("722a850c-6591-4a6f-b292-2bd07249af60", 200)).rejects.toBeInstanceOf(Error)
+    })
+
+
+    test('When price is missing', async () => {
+        const dishPrismaRepository = new DishPrismaRepository()
+
+        const updateDishById = new UpdateDishById(dishPrismaRepository)
+
+        //Price is missing
+        //@ts-ignore
+        await expect(updateDishById.updateDish("722a850c-6591-4a6f-b292-2bd07249af60", "Esta es la descripción de un plato cambiada para pruebas unitarias")).rejects.toBeInstanceOf(Error)
+    })
+
+
+    test('when there is an error in update dish', async () => {
+        const dishPrismaRepository = new DishPrismaRepository()
+
+        const spyUpdateDish = jest.spyOn(dishPrismaRepository, 'updateDishById')
+
+        spyUpdateDish.mockRejectedValue(new Error('ERROR IN UPDATE DISH'))
+
+        const updateDishById = new UpdateDishById(dishPrismaRepository)
+
+        await expect(updateDishById.updateDish("722a850c-6591-4a6f-b292-2bd07249af60", "Esta es la descripción de un plato cambiada para pruebas unitarias", 200)).rejects.toBeInstanceOf(Error)
+    })
+
+
+    test('when dish not found', async () => {
+        const dishPrismaRepository = new DishPrismaRepository()
+
+        const spyUpdateDish = jest.spyOn(dishPrismaRepository, 'updateDishById')
+
+        spyUpdateDish.mockResolvedValue(null)
+
+        const updateDishById = new UpdateDishById(dishPrismaRepository)
+
+        await expect(updateDishById.updateDish("722a850c-6591-4a6f-b292-2bd07249af60", "Esta es la descripción de un plato cambiada para pruebas unitarias", 200)).rejects.toBeInstanceOf(Error)
+    })
 })

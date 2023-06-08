@@ -13,7 +13,7 @@ export default class UpdateOrderByOrderId {
                 throw new Error('Order state is missing')
             }
     
-            const orderFound = await this.orderPersistanceRepository.getOrderByOrderId(orderId)
+            const orderFound = await this.orderPersistanceRepository.getOrderByOrderId(orderId)          
             if(!orderFound){
                 throw new Error('Order not found')
             }
@@ -22,6 +22,10 @@ export default class UpdateOrderByOrderId {
             }
             
             const orderUpdated = await this.orderPersistanceRepository.updateOrderByOrderId(orderId, orderState, chefId)
+            if(!orderUpdated){
+                throw new Error('Order not found')
+            }
+            
             return orderUpdated
 
         } catch (error: any) {

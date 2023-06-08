@@ -3,19 +3,19 @@ import RestaurantDTO from "../domain/restaurant.dto"
 import Restaurant from "../domain/restaurant.model"
 
 import RestaurantPersistanceRepository from "../domain/restaurant.persistance.repository"
-import ImageUploadRepository from "../domain/image.upload.repository"
+import RestaurantImageUploadRepository from "../domain/restaurant.image.upload.repository"
 import RestaurantIdGeneratorRepository from "../domain/restaurant.id.generator.repository"
 import RestaurantServiceRepository from "../domain/restaurant.service.repository"
 
 export default class InsertRestaurant {
     private readonly restaurantPersistanceRepository: RestaurantPersistanceRepository
-    private readonly imageUploadRepository: ImageUploadRepository
+    private readonly restaurantImageUploadRepository: RestaurantImageUploadRepository
     private readonly restaurantIdGeneratorRepository: RestaurantIdGeneratorRepository
     private readonly restaurantServiceRepository: RestaurantServiceRepository
 
-    constructor(restaurantPersistanceRepository: RestaurantPersistanceRepository, imageUploadRepository: ImageUploadRepository, restaurantIdGeneratorRepository: RestaurantIdGeneratorRepository, restaurantServiceRepository: RestaurantServiceRepository) {
+    constructor(restaurantPersistanceRepository: RestaurantPersistanceRepository, restaurantImageUploadRepository: RestaurantImageUploadRepository, restaurantIdGeneratorRepository: RestaurantIdGeneratorRepository, restaurantServiceRepository: RestaurantServiceRepository) {
         this.restaurantPersistanceRepository = restaurantPersistanceRepository,
-        this.imageUploadRepository = imageUploadRepository,
+        this.restaurantImageUploadRepository = restaurantImageUploadRepository,
         this.restaurantIdGeneratorRepository = restaurantIdGeneratorRepository,
         this.restaurantServiceRepository = restaurantServiceRepository
     }
@@ -41,7 +41,7 @@ export default class InsertRestaurant {
             }
             
             const restaurantId = this.restaurantIdGeneratorRepository.generateRestaurantId()
-            const restaurantUrlLogoUpload = await this.imageUploadRepository.uploadImage(restaurantUrlLogo)
+            const restaurantUrlLogoUpload = await this.restaurantImageUploadRepository.uploadImage(restaurantUrlLogo)
             
             const newRestaurant = new Restaurant({
                 restaurantId: restaurantId, 

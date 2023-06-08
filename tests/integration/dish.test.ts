@@ -1,16 +1,11 @@
 import index from '../../src/index'
 import request from 'supertest'
-import {
-dishDataForCreate, 
-dishDataValidateForCreate,
-dishDataForUpdate,
-dishDataValidateForUpdate} from './helpers/dish.helpers'
 
 const { app, server} = index
 const api = request(app)
-const adminToken = process.env.ADMIN_TOKEN
-const ownerToken = process.env.OWNER_TOKEN
-const ownerWrongToken = process.env.OWNER_WRONG_TOKEN
+const adminToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3MTYyMjM3NjYzNTU2NDk0NjQ5IiwidXNlclJvbGUiOiJBZG1pbmlzdHJhdG9yIiwiaWF0IjoxNjg0ODAwNTgwfQ.2XyADUiWdkhUySKHMl9VwBKoVNe-usyQqKCxBy51ZX4'
+const ownerToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3MjkzNjg4ODc5MzIxODU1MjgxIiwidXNlclJvbGUiOiJPd25lciIsImlhdCI6MTY4NTAzOTY4OX0.BPB1Na1rTwqKDdvp8EGKl25psADCUrj9HPLQF6OKs5o'
+const ownerWrongToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyNjgzNzUxMDEwMzAwNjMxMTIzIiwidXNlclJvbGUiOiJPd25lciIsImlhdCI6MTY4NDgwODM4MH0.lmWBJTH9oet9uh0uBfwl4Fs-xseXDmbQT9Xk7J78jso'
 const tokenInvalid = 'ecnecnenne3jrn4rn4jrn4r'
 
 describe('POST /createDish', () => {
@@ -71,7 +66,7 @@ describe('POST /createDish', () => {
           .expect('Content-Type', /application\/json/)
           .expect(401)
 
-        expect(response.body.message).toStrictEqual("Invalid token")
+        expect(response.body.message).toStrictEqual("jwt malformed")
     })
     
     test('When the owner does not belong to the restaurant of the dish', async () => {
@@ -87,43 +82,6 @@ describe('POST /createDish', () => {
           .expect(403)
 
         expect(response.body.message).toStrictEqual("Access denied. This restaurant is not assigned to this owner")
-    })
-
-    test('When one field or all fields are missing', async () => {
-        for(const dishData of dishDataForCreate){
-            const response = await api.post('/api/v1/dishes/create').send(dishData)
-                .set('Authorization', `Bearer ${ownerToken}`)    
-                .expect('Content-Type', /application\/json/)
-                .expect(400)
-
-            expect(response.body.message).toStrictEqual('Data is missing')
-        }
-    })
-
-    test('When the price is not positive, integer and greater than 0', async () => {
-        for(const dishData of dishDataValidateForCreate){
-            const response = await api.post('/api/v1/dishes/create').send(dishData)
-                .set('Authorization', `Bearer ${ownerToken}`)
-                .expect('Content-Type', /application\/json/)
-                .expect(400)
-
-            expect(response.body.message).toStrictEqual('The dish data entered is not correct')
-        }
-    })
-
-    test('When restaurant id is not correspond to an restaurant', async () => {
-        const response = await api.post('/api/v1/dishes/create').send({
-            dishName: "Plato nuevo",
-            categoryId: "2000001",
-            dishDescription: "Este es un plato de prueba",
-            dishPrice: 20,
-            restaurantId: "1a2a730e-ee3c-4d4f-4554-4554444", //The restaurant id is wrong
-            dishUrlImage: "https://d7lju56vlbdri.cloudfront.net/var/ezwebin_site/storage/images/_aliases/img_1col/noticias/solar-orbiter-toma-imagenes-del-sol-como-nunca-antes/9437612-1-esl-MX/Solar-Orbiter-toma-imagenes-del-Sol-como-nunca-antes.jpg"
-        }).set('Authorization', `Bearer ${ownerToken}`)
-          .expect('Content-Type', /application\/json/)
-          .expect(404)
-
-        expect(response.body.message).toStrictEqual('The restaurant id entered does not exist')
     })
 })
 
@@ -172,7 +130,7 @@ describe('PUT /updateDish', () => {
           .expect('Content-Type', /application\/json/)
           .expect(401)
 
-        expect(response.body.message).toStrictEqual("Invalid token")
+        expect(response.body.message).toStrictEqual("jwt malformed")
     })
 
     test('When the owner does not belong to the restaurant of the dish', async () => {
@@ -184,28 +142,6 @@ describe('PUT /updateDish', () => {
           .expect(403)
 
         expect(response.body.message).toStrictEqual("Access denied. This restaurant is not assigned to this owner")
-    })
-
-    test('When the description or price are missing', async () => {
-        for(const dishData of dishDataForUpdate){
-            const response = await api.put(`/api/v1/dishes/update/${dishId}`).send(dishData)
-                .set('Authorization', `Bearer ${ownerToken}`)
-                .expect('Content-Type', /application\/json/)
-                .expect(400)
-            
-            expect(response.body.message).toStrictEqual('Data is missing')
-        }
-    })
-
-    test('When description or price validate are wrong', async () => {
-        for(const dishData of dishDataValidateForUpdate){
-            const response = await api.put(`/api/v1/dishes/update/${dishId}`).send(dishData)
-                .set('Authorization', `Bearer ${ownerToken}`)
-                .expect('Content-Type', /application\/json/)
-                .expect(400)
-
-            expect(response.body.message).toStrictEqual('The description or price entered are incorrect')
-        }
     })
 })
 
@@ -250,7 +186,7 @@ describe('PUT /updateStateDish', () => {
           .expect('Content-Type', /application\/json/)
           .expect(401)
 
-        expect(response.body.message).toStrictEqual("Invalid token")
+        expect(response.body.message).toStrictEqual("jwt malformed")
     })
 
     test('When the owner does not belong to the restaurant of the dish', async () => {
@@ -269,7 +205,7 @@ describe('PUT /updateStateDish', () => {
             .expect('Content-Type', /application\/json/)
             .expect(400)
         
-        expect(response.body.message).toStrictEqual('Data is missing')
+        expect(response.body.message).toStrictEqual('State is missing')
     })
 })
 

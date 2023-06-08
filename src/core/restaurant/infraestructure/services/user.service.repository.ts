@@ -1,7 +1,7 @@
 import axios from 'axios'
 import RestaurantServiceRepository from '../../domain/restaurant.service.repository'
 
-const serviceUrl = 'http://localhost:3000'
+const serviceUrl = process.env.API_USER
 
 export default class UserServiceRepository implements RestaurantServiceRepository{
     

@@ -22,7 +22,7 @@ export default class OrderPrismaRepository implements OrderPersistanceRepository
         }
     }
 
-    async getOrderByClientId (clientId: string): Promise<Order[]>{
+    async getOrderByClientId (clientId: string): Promise<Order[] | null>{
         try {
             const orderFound = await prisma.orders.findMany({
                 where:{
@@ -37,7 +37,7 @@ export default class OrderPrismaRepository implements OrderPersistanceRepository
         }
     }
 
-    async listAllOrdersByState (orderState: string, restaurantId: string): Promise<Order[]> {
+    async listAllOrdersByState (orderState: string, restaurantId: string): Promise<Order[] | null> {
         try {
             const ordersFound = await prisma.orders.findMany({
                 where: {
@@ -56,7 +56,7 @@ export default class OrderPrismaRepository implements OrderPersistanceRepository
         }
     }
 
-    async updateOrderByOrderId (orderId: string, orderState: string, chefId: string): Promise<Order>{
+    async updateOrderByOrderId (orderId: string, orderState: string, chefId: string): Promise<Order | null>{
         try {
             const orderUpdated = await prisma.orders.update({
                 where:{

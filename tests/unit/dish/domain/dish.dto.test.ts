@@ -1,14 +1,12 @@
-import {validate} from "class-validator"
+import { ValidationError, validate } from "class-validator"
 import DishDTO from "../../../../src/core/dish/domain/dish.dto"
-
-jest.mock("class-validator")
+import { dishDtoDataMissing, dishDtoDataValidate } from "../../../helpers/dish/dish.dto.helper"
 
 describe('DishDTO model', () => {
 
     test('The data is entered correctly', async () => {
-        (validate as jest.Mock).mockResolvedValueOnce([])
 
-        const error = await validate(new DishDTO({
+        const errorDataDish = await validate(new DishDTO({
             dishName: "Plato nuevo",
             categoryId: "2000000",
             dishDescription: "Esta es la descripcion del plato",
@@ -17,6 +15,28 @@ describe('DishDTO model', () => {
             dishUrlImage: "https://cnnespanol.cnn.com/wp-content/uploads/2022/07/220713165438-rba-web-nasa-full-169.jpg?quality=100&strip=info&w=384&h=216&crop=1"
         }))
 
-        expect(error).toEqual([])
+        expect(errorDataDish).toEqual([])
+    })
+
+
+    test('When some or all parameters are missing', async () => {
+
+        for (const data of dishDtoDataMissing){
+            //@ts-ignore
+            const errorDataDish = await validate(new DishDTO(data))
+
+            expect(errorDataDish[0]).toBeInstanceOf(ValidationError)
+        }
+    })
+
+
+    test('When data validate are wrong', async () => {
+
+        for (const data of dishDtoDataValidate){
+            //@ts-ignore
+            const errorDataDish = await validate(new DishDTO(data))
+
+            expect(errorDataDish[0]).toBeInstanceOf(ValidationError)
+        }
     })
 })

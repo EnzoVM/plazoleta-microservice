@@ -6,10 +6,10 @@ import ListDishesByRestaurantId from '../core/dish/application/list.dishes.by.re
 import GetDishById from '../core/dish/application/get.dish.by.id'
 
 import DishPrismaRepository from '../core/dish/infraestructure/prisma/dish.prisma.repository'
-import ImagenCloudinaryRepository from '../core/restaurant/infraestructure/cloudinary/image.cloudinary.repository'
+import DishImagenCloudinaryRepository from '../core/dish/infraestructure/cloudinary/dish.image.cloudinary.repository'
 import DishUuidRepository from '../core/dish/infraestructure/uuid/dish.uuid.repository'
 
-const insertDish = new InsertDish(new DishPrismaRepository, new ImagenCloudinaryRepository, new DishUuidRepository)
+const insertDish = new InsertDish(new DishPrismaRepository, new DishImagenCloudinaryRepository, new DishUuidRepository)
 const updateDishById = new UpdateDishById(new DishPrismaRepository)
 const updateStateDishById = new UpdateStateDishById(new DishPrismaRepository)
 const listDishesByRestaurantId = new ListDishesByRestaurantId(new DishPrismaRepository)

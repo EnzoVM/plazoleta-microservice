@@ -26,6 +26,9 @@ export default class InsertOrder {
         try {
             //Validate if the user have orders pending, in preparation or ready
             const ordersFound = await this.orderPersistanceRepository.getOrderByClientId(clientId)
+            if(!ordersFound){
+                throw new Error('There are no orders assigned to this client')
+            }
             ordersFound.map((order) => {
                 if(order.orderState === 'Pending') { throw new Error('You have an order with pending status')}
                 if(order.orderState === 'In preparation') { throw new Error('You have an order with in preparation status')}

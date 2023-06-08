@@ -10,7 +10,10 @@ export default class ListDishesByRestaurantId {
     async listDishes (page:number, limit: number, restaurantId: string){
         try {
             const dishesByRestaurant = await this.dishPersistanceRepository.listDishesByRestaurantId(restaurantId)
-        
+            if(!dishesByRestaurant){
+                throw new Error('There are not dishes assigned to this restaurant')
+            }
+            
             const dishesGroupedByCategory = dishesByRestaurant.reduce((group, dish) => {
                 const category = dish.categoryId
 

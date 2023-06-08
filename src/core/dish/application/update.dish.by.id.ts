@@ -22,6 +22,9 @@ export default class UpdateDishById {
             }
     
             const dishUpdated = await this.dishPersistanceRepository.updateDishById(dishId, dishDescription, dishPrice)
+            if(!dishUpdated){
+                throw new  Error('Dish not found')
+            }
             return dishUpdated
 
         } catch (error: any) {

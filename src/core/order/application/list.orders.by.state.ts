@@ -18,6 +18,9 @@ export default class ListOrdersByState {
             }
             
             const orderList = await this.orderPersistanceRepository.listAllOrdersByState(orderState, restaurantEmployeeFound.restaurantId)
+            if(!orderList){
+                throw new Error('Orders not found')
+            }
 
             const startIndex = (page-1) * limit
             const endIndex = page * limit

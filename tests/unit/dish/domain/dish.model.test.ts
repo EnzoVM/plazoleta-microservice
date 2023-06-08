@@ -21,6 +21,7 @@ describe('Dish model', () => {
 
         
         expect(newDish.dishId).toBe('fjr44jjjf4f-55-6443dd22s')
+        expect(newDish.dishName).toStrictEqual('Plato nuevo')
     })
 
 })
