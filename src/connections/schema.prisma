@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Orders {
+  orderId             String              @id @unique
+  clientId            String              @db.VarChar(255)
+  orderDate           DateTime            @default(now())
+  orderState          String              @db.VarChar(255)
+  chefId              String?
+  restaurantId        String
+  orderDishes         OrderDishes[]
+  restaurant          Restaurant          @relation(fields: [restaurantId], references: [restaurantId])
+  restaurantEmployee  RestaurantEmployee? @relation(fields: [chefId], references: [chefId])
+}
+
+model RestaurantEmployee {
+  restaurantEmployeeId  String  @id @unique
+  restaurantId          String
+  chefId                String  @unique
+  orders                Orders[]
+}
+
+model Restaurant{
+  restaurantId          String    @id @unique
+  restaurantName        String    @db.VarChar(255)
+  restaurantNIT         Int
+  restaurantAddress     String    @db.VarChar(255)
+  restaurantPhoneNumber String       
+  restaurantUrlLogo     String    @db.VarChar(255)
+  ownerId               String    @db.VarChar(255)
+  orders                Orders[]
+  dishes                Dishes[]
+}
+
+model Dishes {
+  dishId            String        @id @unique
+  dishName          String        @db.VarChar(255)
+  categoryId        String    
+  dishDescription   String        @db.VarChar(255)
+  dishPrice         Int
+  restaurantId      String
+  dishUrlImage      String        @db.VarChar(255)
+  dishActive        Boolean
+  orderDishes       OrderDishes[]
+  category          Category      @relation(fields: [categoryId], references: [categoryId])
+  restaurant        Restaurant    @relation(fields: [restaurantId], references: [restaurantId])
+}
+
+model Category {
+  categoryId            String     @id @unique
+  categoryName          String     @db.VarChar(255)
+  categoryDescription   String     @db.VarChar(255)
+  dishes                Dishes[]
+}
+
+model OrderDishes {
+  orderDishesId   String      @id @unique
+  orderId         String      @db.VarChar(255)
+  dishId          String      @db.VarChar(255)
+  cantidad        Int
+  order           Orders      @relation(fields: [orderId], references: [orderId])
+  dishes          Dishes      @relation(fields: [dishId], references: [dishId])
+}
