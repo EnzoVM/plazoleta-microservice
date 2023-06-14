@@ -9,6 +9,7 @@ import restaurantRouter from './routes/restaurant.routes'
 import dishRouter from './routes/dish.routes'
 import orderRouter from './routes/order.routes'
 import restaurantEmployeeRouter from './routes/restaurant.employee.routes'
+import healthRoutes from './routes/health.routes'
 import prisma from './connections/prisma.connection'
 import cors from 'cors'
 
@@ -30,7 +31,7 @@ app.use('/api/v1/restaurants', restaurantRouter)
 app.use('/api/v1/dishes', dishRouter)
 app.use('/api/v1/orders', orderRouter)
 app.use('/api/v1/restaurantemployee', restaurantEmployeeRouter)
-
+app.use('/api/v1', healthRoutes)
 
 prisma.$connect()
 .then(() => console.log('MySQL was connected successfully'))
