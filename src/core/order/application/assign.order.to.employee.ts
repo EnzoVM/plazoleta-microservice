@@ -1,18 +1,14 @@
 import OrderPersistanceRepository from "../domain/order.persistance.repository"
 
-export default class UpdateOrderByOrderId {
+export default class AssignOrderToEmployee {
     private readonly orderPersistanceRepository: OrderPersistanceRepository
     
     constructor(orderPersistanceRepository: OrderPersistanceRepository) {
         this.orderPersistanceRepository = orderPersistanceRepository
     }
 
-    async updateOrder (orderId: string, orderState: string, chefId: string){
+    async assignOrder (orderId: string, chefId: string){
         try {
-            if(!orderState){
-                throw new Error('Order state is missing')
-            }
-    
             const orderFound = await this.orderPersistanceRepository.getOrderByOrderId(orderId)          
             if(!orderFound){
                 throw new Error('Order not found')
@@ -21,12 +17,12 @@ export default class UpdateOrderByOrderId {
                 throw new Error('The request must be in pending status to assign')
             }
             
-            const orderUpdated = await this.orderPersistanceRepository.updateOrderByOrderId(orderId, orderState, chefId)
-            if(!orderUpdated){
-                throw new Error('Order not found')
+            const orderAssigned = await this.orderPersistanceRepository.updateOrderByOrderId(orderId, 'In preparation', chefId)
+            if(!orderAssigned){
+                throw new Error('Order can not assign')
             }
             
-            return orderUpdated
+            return orderAssigned
 
         } catch (error: any) {
             throw new Error(error.message)

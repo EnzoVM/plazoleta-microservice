@@ -89,5 +89,23 @@ export default class OrderPrismaRepository implements OrderPersistanceRepository
             throw new Error('ERROR IN GET ORDER BY ORDER ID')
         }
     }
+
+    async updateOrderById (orderId: string, orderState: string): Promise <Order| null> {
+        try {
+            const orderUpdated = await prisma.orders.update({
+                where:{
+                    orderId
+                },
+                data: {
+                    orderState
+                }
+            })
+
+            return orderUpdated
+
+        } catch (error: any) {
+            throw new Error('ERROR IN UPDATE ORDER BY ID')
+        }
+    }
     
 }
