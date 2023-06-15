@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
-import GetRestaurantById from '../core/restaurant/application/get.restaurant.by.restaurant.id'
+import GetRestaurantByRestaurantId from '../core/restaurant/application/get.restaurant.by.restaurant.id'
 import RestaurantPrismaRepository from '../core/restaurant/infraestructure/prisma/restaurant.prisma.repository'
 import GetDishById from '../core/dish/application/get.dish.by.id'
 import DishPrismaRepository from '../core/dish/infraestructure/prisma/dish.prisma.repository'
 
-const getRestaurantById = new GetRestaurantById(new RestaurantPrismaRepository)
+const getRestaurantByRestaurantId = new GetRestaurantByRestaurantId(new RestaurantPrismaRepository)
 const getDishById = new GetDishById(new DishPrismaRepository)
 
 export const verifyOwnerRole = async (req: Request, res: Response, next: NextFunction) => {
@@ -37,7 +37,7 @@ export const verifyOwnerRole = async (req: Request, res: Response, next: NextFun
                 })
             }
 
-            const restaurantFound = await getRestaurantById.getRestaurantById(restaurantId)
+            const restaurantFound = await getRestaurantByRestaurantId.getRestaurantById(restaurantId)
 
             if(!restaurantFound){
                 return res.status(404).json({
@@ -54,7 +54,7 @@ export const verifyOwnerRole = async (req: Request, res: Response, next: NextFun
 
         if(req.method === 'PUT') {
             const dishFound = await getDishById.getDishById(dishId)
-            const restaurantFound = await getRestaurantById.getRestaurantById(dishFound.restaurantId)
+            const restaurantFound = await getRestaurantByRestaurantId.getRestaurantById(dishFound.restaurantId)
 
             if(!restaurantFound){
                 return res.status(404).json({

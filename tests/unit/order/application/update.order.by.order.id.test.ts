@@ -5,9 +5,20 @@ jest.mock("../../../../src/core/order/infraestructure/prisma/order.prisma.reposi
 
 describe('Update order by order id', () => {
 
-    test('Update order successfully', async () => {
-        const orderPrismaRepository = new OrderPrismaRepository()
+    let orderPrismaRepository
+    let updateOrderByOrderId: UpdateOrderByOrderId
 
+    beforeEach(() => {
+        orderPrismaRepository = new OrderPrismaRepository()
+        updateOrderByOrderId = new UpdateOrderByOrderId(orderPrismaRepository)
+    })
+    
+    afterEach(() => {
+        jest.restoreAllMocks()
+    })
+
+
+    test('Update order successfully', async () => {
         const spyUpdateOrder = jest.spyOn(orderPrismaRepository, 'updateOrderByOrderId')
         const spyGetOrder = jest.spyOn(orderPrismaRepository, 'getOrderByOrderId')
 
@@ -31,7 +42,6 @@ describe('Update order by order id', () => {
             restaurantId: "de891602-ef54-46bc-9356-9e4bf666defc"
         })
 
-        const updateOrderByOrderId = new UpdateOrderByOrderId(orderPrismaRepository)
         const orderUpdated = await updateOrderByOrderId.updateOrder('822e5b7d-fcb5-47af-bb9b-ac9a8c513d29', 'In preparation', '34343395959359394294')
 
         expect(orderUpdated.orderState).toStrictEqual('In preparation')
@@ -39,10 +49,6 @@ describe('Update order by order id', () => {
 
 
     test('When order state is missing', async () => {
-        const orderPrismaRepository = new OrderPrismaRepository()
-
-        const updateOrderByOrderId = new UpdateOrderByOrderId(orderPrismaRepository)
-
         //State is missing
         //@ts-ignore
         await expect(updateOrderByOrderId.updateOrder('822e5b7d-fcb5-47af-bb9b-ac9a8c513d29', '34343395959359394294')).rejects.toBeInstanceOf(Error)
@@ -50,8 +56,6 @@ describe('Update order by order id', () => {
 
 
     test('When order not found', async () => {
-        const orderPrismaRepository = new OrderPrismaRepository()
-
         const spyUpdateOrder = jest.spyOn(orderPrismaRepository, 'updateOrderByOrderId')
         const spyGetOrder = jest.spyOn(orderPrismaRepository, 'getOrderByOrderId')
 
@@ -67,15 +71,11 @@ describe('Update order by order id', () => {
             restaurantId: "de891602-ef54-46bc-9356-9e4bf666defc"
         })
 
-        const updateOrderByOrderId = new UpdateOrderByOrderId(orderPrismaRepository)
-
         await expect(updateOrderByOrderId.updateOrder('822e5b7d-fcb5-47af-bb9b-ac9a8c513d29', 'In preparation', '34343395959359394294')).rejects.toBeInstanceOf(Error)
     })
 
 
     test('When there is an error with get order', async () => {
-        const orderPrismaRepository = new OrderPrismaRepository()
-
         const spyUpdateOrder = jest.spyOn(orderPrismaRepository, 'updateOrderByOrderId')
         const spyGetOrder = jest.spyOn(orderPrismaRepository, 'getOrderByOrderId')
 
@@ -91,15 +91,11 @@ describe('Update order by order id', () => {
             restaurantId: "de891602-ef54-46bc-9356-9e4bf666defc"
         })
 
-        const updateOrderByOrderId = new UpdateOrderByOrderId(orderPrismaRepository)
-
         await expect(updateOrderByOrderId.updateOrder('822e5b7d-fcb5-47af-bb9b-ac9a8c513d29', 'In preparation', '34343395959359394294')).rejects.toBeInstanceOf(Error)
     })
 
     
     test('When the state is different to Pending', async () => {
-        const orderPrismaRepository = new OrderPrismaRepository()
-
         const spyUpdateOrder = jest.spyOn(orderPrismaRepository, 'updateOrderByOrderId')
         const spyGetOrder = jest.spyOn(orderPrismaRepository, 'getOrderByOrderId')
 
@@ -123,15 +119,11 @@ describe('Update order by order id', () => {
             restaurantId: "de891602-ef54-46bc-9356-9e4bf666defc"
         })
 
-        const updateOrderByOrderId = new UpdateOrderByOrderId(orderPrismaRepository)
-
         await expect(updateOrderByOrderId.updateOrder('822e5b7d-fcb5-47af-bb9b-ac9a8c513d29', 'In preparation', '34343395959359394294')).rejects.toBeInstanceOf(Error)
     })
 
 
     test('When the state is different to Pending', async () => {
-        const orderPrismaRepository = new OrderPrismaRepository()
-
         const spyUpdateOrder = jest.spyOn(orderPrismaRepository, 'updateOrderByOrderId')
         const spyGetOrder = jest.spyOn(orderPrismaRepository, 'getOrderByOrderId')
 
@@ -147,15 +139,11 @@ describe('Update order by order id', () => {
 
         spyUpdateOrder.mockResolvedValue(null)
 
-        const updateOrderByOrderId = new UpdateOrderByOrderId(orderPrismaRepository)
-
         await expect(updateOrderByOrderId.updateOrder('822e5b7d-fcb5-47af-bb9b-ac9a8c513d29', 'In preparation', '34343395959359394294')).rejects.toBeInstanceOf(Error)
     })
 
 
     test('When the state is different to Pending', async () => {
-        const orderPrismaRepository = new OrderPrismaRepository()
-
         const spyUpdateOrder = jest.spyOn(orderPrismaRepository, 'updateOrderByOrderId')
         const spyGetOrder = jest.spyOn(orderPrismaRepository, 'getOrderByOrderId')
 
@@ -170,8 +158,6 @@ describe('Update order by order id', () => {
         })
 
         spyUpdateOrder.mockRejectedValue(new Error('ERROR'))
-
-        const updateOrderByOrderId = new UpdateOrderByOrderId(orderPrismaRepository)
 
         await expect(updateOrderByOrderId.updateOrder('822e5b7d-fcb5-47af-bb9b-ac9a8c513d29', 'In preparation', '34343395959359394294')).rejects.toBeInstanceOf(Error)
     })

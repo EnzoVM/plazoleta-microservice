@@ -3,7 +3,7 @@ import InsertEmployeeToRestaurant from '../core/restaurantemployee/application/i
 import GetRestaurantEmployeeByEmployeeId from '../core/restaurantemployee/application/get.restaurant.employee.by.employee.id'
 
 import RestaurantEmployeePrismaRepository from '../core/restaurantemployee/infraestructure/prisma/restaurant.employee.prisma.repository'
-import RestaurantEmployeeUuidRepository from '../core/restaurantemployee/infraestructure/uuid/restaurant.employee.uuid.repository.ts'
+import RestaurantEmployeeUuidRepository from '../core/restaurantemployee/infraestructure/uuid/restaurant.employee.uuid.repository'
 
 const insertEmployeeToRestaurant = new InsertEmployeeToRestaurant(new RestaurantEmployeePrismaRepository, new RestaurantEmployeeUuidRepository)
 const getRestaurantEmployeeByEmployeeId = new GetRestaurantEmployeeByEmployeeId(new RestaurantEmployeePrismaRepository)
