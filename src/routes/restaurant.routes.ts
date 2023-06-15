@@ -6,7 +6,7 @@ const restaurantRouter = Router()
 
 restaurantRouter
     .get('/:restaurantId', getRestaurantById)
-    .get('/list/:page/:limit', listRestaurant)
+    .get('/list/:page/:limit', verifyUserRole('Client'), listRestaurant)
     .post('/create', verifyUserRole('Administrator'),createNewRestaurant)
 
 export default restaurantRouter

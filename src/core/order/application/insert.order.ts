@@ -29,11 +29,11 @@ export default class InsertOrder {
             if(!ordersFound){
                 throw new Error('There are no orders assigned to this client')
             }
-            ordersFound.map((order) => {
+            for(const order of ordersFound){
                 if(order.orderState === 'Pending') { throw new Error('You have an order with pending status')}
                 if(order.orderState === 'In preparation') { throw new Error('You have an order with in preparation status')}
                 if(order.orderState === 'Ready') {throw new Error('You have an order with ready status')}
-            })
+            }
             
             //Validate dishes with restaurant id
             await Promise.all(
