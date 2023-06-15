@@ -7,5 +7,6 @@ export default interface OrderPersistanceRepository {
     listAllOrdersByState: (orderState: string, restaurantId: string) => Promise<Order[] | null>
     updateOrderByOrderId: (orderId: string, orderState: string, chefId: string) => Promise <Order| null>
     getOrderByOrderId: (orderId: string) => Promise<Order | null>
+    updateOrderById: (orderId: string, orderState: string) => Promise <Order| null>
     
 }
