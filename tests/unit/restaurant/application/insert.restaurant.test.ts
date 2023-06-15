@@ -11,12 +11,31 @@ jest.mock("../../../../src/core/restaurant/infraestructure/services/user.service
 
 describe('Insert a restaurnat', () => {
 
-    test('Insert a restaurant successfully', async () => {
-        const restaurantPrismaRepository = new RestaurantPrismaRepository()
-        const restaurantImagenCloudinaryRepository = new RestaurantImagenCloudinaryRepository()
-        const restaurantUuidRepository = new RestaurantUuidRepository()
-        const userServiceRepository = new UserServiceRepository()
+    let restaurantPrismaRepository
+    let restaurantImagenCloudinaryRepository
+    let restaurantUuidRepository
+    let userServiceRepository
+    let insertRestaurant: InsertRestaurant
 
+    beforeEach(() => {
+        restaurantPrismaRepository = new RestaurantPrismaRepository()
+        restaurantImagenCloudinaryRepository = new RestaurantImagenCloudinaryRepository()
+        restaurantUuidRepository = new RestaurantUuidRepository()
+        userServiceRepository = new UserServiceRepository()
+        insertRestaurant = new InsertRestaurant(
+            restaurantPrismaRepository, 
+            restaurantImagenCloudinaryRepository, 
+            restaurantUuidRepository, 
+            userServiceRepository
+        )
+    })
+    
+    afterEach(() => {
+        jest.restoreAllMocks()
+    })
+
+
+    test('Insert a restaurant successfully', async () => {
         const spyInsertRestaurant = jest.spyOn(restaurantPrismaRepository, 'insertRestaurant')
         const spyImageRestaurant = jest.spyOn(restaurantImagenCloudinaryRepository, 'uploadImage')
         const spyRestaurantId = jest.spyOn(restaurantUuidRepository, 'generateRestaurantId')
@@ -40,7 +59,6 @@ describe('Insert a restaurnat', () => {
             data: 'Owner'
         })
 
-        const insertRestaurant = new InsertRestaurant(restaurantPrismaRepository, restaurantImagenCloudinaryRepository, restaurantUuidRepository, userServiceRepository)
         const restaurantSaved = await insertRestaurant.createRestaurant('abc', 987457634, 'Av. Prueba 356', '+734526754234', 'https://cnnespanol.cnn.com/wp-content/uploads/2022/07/220713165438-rba-web-nasa-full-169.jpg?quality=100&strip=info&w=384&h=216&crop=1', '7293688879321855281')
 
         expect(restaurantSaved.restaurantId).toBe('9ae06228-c0db-43aa-b466-45124be8d446')
@@ -48,13 +66,6 @@ describe('Insert a restaurnat', () => {
 
 
     test('When some or all parameters are missing', async () => {
-        const restaurantPrismaRepository = new RestaurantPrismaRepository()
-        const restaurantImagenCloudinaryRepository = new RestaurantImagenCloudinaryRepository()
-        const restaurantUuidRepository = new RestaurantUuidRepository()
-        const userServiceRepository = new UserServiceRepository()
-
-        const insertRestaurant = new InsertRestaurant(restaurantPrismaRepository, restaurantImagenCloudinaryRepository, restaurantUuidRepository, userServiceRepository)
-
         //@ts-ignore
         await expect(insertRestaurant.createRestaurant(987457634, '+734526754234', 'https://cnnespanol.cnn.com/wp-content/uploads/2022/07/220713165438-rba-web-nasa-full-169.jpg?quality=100&strip=info&w=384&h=216&crop=1', '7293688879321855281')).rejects.toBeInstanceOf(Error)
     })

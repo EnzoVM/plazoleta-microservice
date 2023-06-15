@@ -6,14 +6,24 @@ jest.mock("../../../../src/core/restaurant/infraestructure/prisma/restaurant.pri
 
 describe('List all restaurant', () => {
 
-    test('List all restaurant successfully', async () => {
-        const restaurantPrismaRepository = new RestaurantPrismaRepository()
+    let restaurantPrismaRepository
+    let listAllRestaurant: ListAllRestaurant
 
+    beforeEach(() => {
+        restaurantPrismaRepository = new RestaurantPrismaRepository()
+        listAllRestaurant = new ListAllRestaurant(restaurantPrismaRepository)
+    })
+    
+    afterEach(() => {
+        jest.restoreAllMocks()
+    })
+
+
+    test('List all restaurant successfully', async () => {
         const spyListRestaurant = jest.spyOn(restaurantPrismaRepository, 'listAllRestaurants')
 
         spyListRestaurant.mockResolvedValue(arrayOfRestaurant)
 
-        const listAllRestaurant = new ListAllRestaurant(restaurantPrismaRepository)
         const restaurantList = await listAllRestaurant.listRestaurants(1, 3)
 
         expect(restaurantList).toHaveLength(3)
