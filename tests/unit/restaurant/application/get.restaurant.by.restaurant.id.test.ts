@@ -5,9 +5,20 @@ jest.mock("../../../../src/core/restaurant/infraestructure/prisma/restaurant.pri
 
 describe('Get restaurant by id', () => {
 
-    test('Get a dish successfully', async () => {
-        const restaurantPrismaRepository = new RestaurantPrismaRepository()
-        
+    let restaurantPrismaRepository
+    let getRestaurantByRestaurantId: GetRestaurantByRestaurantId
+
+    beforeEach(() => {
+        restaurantPrismaRepository = new RestaurantPrismaRepository()
+        getRestaurantByRestaurantId = new GetRestaurantByRestaurantId(restaurantPrismaRepository)
+    })
+    
+    afterEach(() => {
+        jest.restoreAllMocks()
+    })
+
+
+    test('Get a dish successfully', async () => {      
         const spyGetRestaurant = jest.spyOn(restaurantPrismaRepository, 'getRestaurantById')
 
         spyGetRestaurant.mockResolvedValue({
@@ -20,34 +31,25 @@ describe('Get restaurant by id', () => {
             ownerId: "2683751010300631123"
         })
 
-        const getRestaurantByRestaurantId = new GetRestaurantByRestaurantId(restaurantPrismaRepository)
         const restaurantFound = await getRestaurantByRestaurantId.getRestaurantById('46326203-ef31-45b3-86ca-02110f9736a7')
 
         expect(restaurantFound.restaurantId).toStrictEqual('46326203-ef31-45b3-86ca-02110f9736a7')
     })
 
 
-    test('When restaurant not found', async () => {
-        const restaurantPrismaRepository = new RestaurantPrismaRepository()
-        
+    test('When restaurant not found', async () => {      
         const spyGetRestaurant = jest.spyOn(restaurantPrismaRepository, 'getRestaurantById')
 
         spyGetRestaurant.mockResolvedValue(null)
-
-        const getRestaurantByRestaurantId = new GetRestaurantByRestaurantId(restaurantPrismaRepository)
 
         await expect(getRestaurantByRestaurantId.getRestaurantById('46326203-ef31-45b3-86ca-02110f9736a7')).rejects.toBeInstanceOf(Error)
     })
 
 
-    test('When there is an error with get restaurant', async () => {
-        const restaurantPrismaRepository = new RestaurantPrismaRepository()
-        
+    test('When there is an error with get restaurant', async () => {       
         const spyGetRestaurant = jest.spyOn(restaurantPrismaRepository, 'getRestaurantById')
 
         spyGetRestaurant.mockRejectedValue(new Error('ERROR'))
-
-        const getRestaurantByRestaurantId = new GetRestaurantByRestaurantId(restaurantPrismaRepository)
 
         await expect(getRestaurantByRestaurantId.getRestaurantById('46326203-ef31-45b3-86ca-02110f9736a7')).rejects.toBeInstanceOf(Error)
     })

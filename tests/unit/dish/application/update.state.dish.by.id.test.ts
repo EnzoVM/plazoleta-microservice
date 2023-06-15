@@ -5,9 +5,20 @@ jest.mock("../../../../src/core/dish/infraestructure/prisma/dish.prisma.reposito
 
 describe('Update State Dish By Id', () => {
 
-    test('Update state dish successfully', async () => {
-        const dishPrismaRepository = new DishPrismaRepository()
+    let dishPrismaRepository
+    let updateStateDishById: UpdateStateDishById
 
+    beforeEach(() => {
+        dishPrismaRepository = new DishPrismaRepository()
+        updateStateDishById = new UpdateStateDishById(dishPrismaRepository)
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
+
+    test('Update state dish successfully', async () => {
         const spyUpdateStateDish = jest.spyOn(dishPrismaRepository, 'updateStateDishById')
 
         spyUpdateStateDish.mockResolvedValue({
@@ -21,7 +32,6 @@ describe('Update State Dish By Id', () => {
             dishActive: false
         })
 
-        const updateStateDishById = new UpdateStateDishById(dishPrismaRepository)
         const stateDishUpdated = await updateStateDishById.changeStateDish("722a850c-6591-4a6f-b292-2bd07249af60", false)     
 
         expect(stateDishUpdated.dishId).toBe("722a850c-6591-4a6f-b292-2bd07249af60")
@@ -30,10 +40,6 @@ describe('Update State Dish By Id', () => {
 
 
     test('When state is missing', async () => {
-        const dishPrismaRepository = new DishPrismaRepository()
-
-        const updateStateDishById = new UpdateStateDishById(dishPrismaRepository)    
-
         //State is missing
         //@ts-ignore
         await expect(updateStateDishById.changeStateDish("722a850c-6591-4a6f-b292-2bd07249af60")).rejects.toBeInstanceOf(Error)
@@ -41,26 +47,18 @@ describe('Update State Dish By Id', () => {
 
 
     test('when dish not found', async () => {
-        const dishPrismaRepository = new DishPrismaRepository()
-
         const spyUpdateStateDish = jest.spyOn(dishPrismaRepository, 'updateStateDishById')
 
         spyUpdateStateDish.mockResolvedValue(null)
-
-        const updateStateDishById = new UpdateStateDishById(dishPrismaRepository) 
 
         await expect(updateStateDishById.changeStateDish("722a850c-6591-4a6f-b292-2bd07249af60", false)).rejects.toBeInstanceOf(Error)
     })
 
 
     test('when dish not found', async () => {
-        const dishPrismaRepository = new DishPrismaRepository()
-
         const spyUpdateStateDish = jest.spyOn(dishPrismaRepository, 'updateStateDishById')
 
         spyUpdateStateDish.mockRejectedValue(new Error('ERROR IN UPDATE STATE'))
-
-        const updateStateDishById = new UpdateStateDishById(dishPrismaRepository) 
 
         await expect(updateStateDishById.changeStateDish("722a850c-6591-4a6f-b292-2bd07249af60", false)).rejects.toBeInstanceOf(Error)
     })

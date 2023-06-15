@@ -7,10 +7,24 @@ jest.mock("../../../../src/core/orderdishes/infraestructure/uuid/orderdishes.uui
 
 describe('Insert new OrderDishes', () => {
 
-    test('Insert a orderdishes successfully', async () => {
-        const orderDishesPrismaRepository = new OrderDishesPrismaRepository()
-        const orderDishesUuidRepository = new OrderDishesUuidRepository()
+    let orderDishesPrismaRepository
+    let orderDishesUuidRepository
+    let insertOrderDishes: InsertOrderDishes
 
+    beforeEach(() => {
+        orderDishesPrismaRepository = new OrderDishesPrismaRepository()
+        orderDishesUuidRepository = new OrderDishesUuidRepository()
+        insertOrderDishes = new InsertOrderDishes(
+            orderDishesPrismaRepository, 
+            orderDishesUuidRepository
+        )
+    })
+    
+    afterEach(() => {
+        jest.restoreAllMocks()
+    })
+
+    test('Insert a orderdishes successfully', async () => {
         const spyInsertOrderDishes = jest.spyOn(orderDishesPrismaRepository, 'insertOrderDishes')
         const spyOrderDishesId = jest.spyOn(orderDishesUuidRepository, 'generateOrderDishesId')
 
@@ -22,7 +36,6 @@ describe('Insert new OrderDishes', () => {
             cantidad: 10
         })
 
-        const insertOrderDishes = new InsertOrderDishes(orderDishesPrismaRepository, orderDishesUuidRepository)
         const orderDishesInserted = await insertOrderDishes.create('frty65erf4f-55-6443dd22s', '53013158-5eb0-4b00-9fe3-d16434ca7382', 10)
 
         expect(orderDishesInserted.orderDishesId).toStrictEqual('f4f4fmrfrfr-f4f4g4-d3e3g5h')
@@ -31,11 +44,6 @@ describe('Insert new OrderDishes', () => {
 
 
     test('When some or all parameters are missing', async () => {
-        const orderDishesPrismaRepository = new OrderDishesPrismaRepository()
-        const orderDishesUuidRepository = new OrderDishesUuidRepository()
-
-        const insertOrderDishes = new InsertOrderDishes(orderDishesPrismaRepository, orderDishesUuidRepository)
-
         //Dish Id is missing
         //@ts-ignore
         await expect(insertOrderDishes.create('frty65erf4f-55-6443dd22s', 10)).rejects.toBeInstanceOf(Error)
@@ -44,9 +52,6 @@ describe('Insert new OrderDishes', () => {
 
 
     test('When there is an error in the generation of the orderdish id', async () => {
-        const orderDishesPrismaRepository = new OrderDishesPrismaRepository()
-        const orderDishesUuidRepository = new OrderDishesUuidRepository()
-
         const spyInsertOrderDishes = jest.spyOn(orderDishesPrismaRepository, 'insertOrderDishes')
         const spyOrderDishesId = jest.spyOn(orderDishesUuidRepository, 'generateOrderDishesId')
 
@@ -60,26 +65,18 @@ describe('Insert new OrderDishes', () => {
             cantidad: 10
         })
 
-        const insertOrderDishes = new InsertOrderDishes(orderDishesPrismaRepository, orderDishesUuidRepository)
-
         await expect(insertOrderDishes.create('frty65erf4f-55-6443dd22s', '53013158-5eb0-4b00-9fe3-d16434ca7382', 10)).rejects.toBeInstanceOf(Error)
         
     })
 
 
     test('When there is an error in the generation of the orderdish id', async () => {
-        const orderDishesPrismaRepository = new OrderDishesPrismaRepository()
-        const orderDishesUuidRepository = new OrderDishesUuidRepository()
-
         const spyInsertOrderDishes = jest.spyOn(orderDishesPrismaRepository, 'insertOrderDishes')
         const spyOrderDishesId = jest.spyOn(orderDishesUuidRepository, 'generateOrderDishesId')
 
         spyOrderDishesId.mockReturnValue('f4f4fmrfrfr-f4f4g4-d3e3g5h')
         spyInsertOrderDishes.mockRejectedValue(new Error('ERROR'))
 
-        const insertOrderDishes = new InsertOrderDishes(orderDishesPrismaRepository, orderDishesUuidRepository)
-
         await expect(insertOrderDishes.create('frty65erf4f-55-6443dd22s', '53013158-5eb0-4b00-9fe3-d16434ca7382', 10)).rejects.toBeInstanceOf(Error)
-        
     })
 })

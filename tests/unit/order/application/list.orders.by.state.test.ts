@@ -8,10 +8,25 @@ jest.mock("../../../../src/core/restaurantemployee/infraestructure/prisma/restau
 
 describe('List orders by state', () => {
 
-    test('List all order by state and items per page successfully', async () => {
-        const orderPrismaRepository = new OrderPrismaRepository()
-        const restaurantEmployeePrismaRepository = new RestaurantEmployeePrismaRepository()
+    let orderPrismaRepository
+    let restaurantEmployeePrismaRepository
+    let listOrdersByState: ListOrdersByState
 
+    beforeEach(() => {
+        orderPrismaRepository = new OrderPrismaRepository()
+        restaurantEmployeePrismaRepository = new RestaurantEmployeePrismaRepository()
+        listOrdersByState = new ListOrdersByState(
+            orderPrismaRepository, 
+            restaurantEmployeePrismaRepository
+        )
+    })
+    
+    afterEach(() => {
+        jest.restoreAllMocks()
+    })
+
+
+    test('List all order by state and items per page successfully', async () => {
         const spyRestaurantEmployee = jest.spyOn(restaurantEmployeePrismaRepository, 'getRestaurantEmployeeById')
         const spyListOrders = jest.spyOn(orderPrismaRepository, 'listAllOrdersByState')
 
@@ -22,7 +37,6 @@ describe('List orders by state', () => {
         })
         spyListOrders.mockResolvedValue(arrayOfOrders)
         
-        const listOrdersByState = new ListOrdersByState(orderPrismaRepository, restaurantEmployeePrismaRepository)
         const listOrders = await listOrdersByState.listOrders('33430504539539593595', 'Pending', 2, 2)
         
         expect(listOrders).toHaveLength(2)
@@ -31,41 +45,28 @@ describe('List orders by state', () => {
 
 
     test('When restaurant employee does not exist', async () => {
-        const orderPrismaRepository = new OrderPrismaRepository()
-        const restaurantEmployeePrismaRepository = new RestaurantEmployeePrismaRepository()
-
         const spyRestaurantEmployee = jest.spyOn(restaurantEmployeePrismaRepository, 'getRestaurantEmployeeById')
         const spyListOrders = jest.spyOn(orderPrismaRepository, 'listAllOrdersByState')
 
         spyRestaurantEmployee.mockResolvedValue(null)
         spyListOrders.mockResolvedValue(arrayOfOrders)
         
-        const listOrdersByState = new ListOrdersByState(orderPrismaRepository, restaurantEmployeePrismaRepository)
-        
         await expect(listOrdersByState.listOrders('33430504539539593595', 'Pending', 2, 2)).rejects.toBeInstanceOf(Error)
     })
 
 
     test('When there is an error with restaurant employee', async () => {
-        const orderPrismaRepository = new OrderPrismaRepository()
-        const restaurantEmployeePrismaRepository = new RestaurantEmployeePrismaRepository()
-
         const spyRestaurantEmployee = jest.spyOn(restaurantEmployeePrismaRepository, 'getRestaurantEmployeeById')
         const spyListOrders = jest.spyOn(orderPrismaRepository, 'listAllOrdersByState')
 
         spyRestaurantEmployee.mockRejectedValue(new Error('ERROR IN RESTAURANT EMPLOYEE'))
         spyListOrders.mockResolvedValue(arrayOfOrders)
         
-        const listOrdersByState = new ListOrdersByState(orderPrismaRepository, restaurantEmployeePrismaRepository)
-        
         await expect(listOrdersByState.listOrders('33430504539539593595', 'Pending', 2, 2)).rejects.toBeInstanceOf(Error)
     })
 
 
     test('When orders not found', async () => {
-        const orderPrismaRepository = new OrderPrismaRepository()
-        const restaurantEmployeePrismaRepository = new RestaurantEmployeePrismaRepository()
-
         const spyRestaurantEmployee = jest.spyOn(restaurantEmployeePrismaRepository, 'getRestaurantEmployeeById')
         const spyListOrders = jest.spyOn(orderPrismaRepository, 'listAllOrdersByState')
 
@@ -76,16 +77,11 @@ describe('List orders by state', () => {
         })
         spyListOrders.mockResolvedValue(null)
         
-        const listOrdersByState = new ListOrdersByState(orderPrismaRepository, restaurantEmployeePrismaRepository)
-        
         await expect(listOrdersByState.listOrders('33430504539539593595', 'Pending', 2, 2)).rejects.toBeInstanceOf(Error)
     })
 
 
     test('When there is an error with list orders', async () => {
-        const orderPrismaRepository = new OrderPrismaRepository()
-        const restaurantEmployeePrismaRepository = new RestaurantEmployeePrismaRepository()
-
         const spyRestaurantEmployee = jest.spyOn(restaurantEmployeePrismaRepository, 'getRestaurantEmployeeById')
         const spyListOrders = jest.spyOn(orderPrismaRepository, 'listAllOrdersByState')
 
@@ -95,8 +91,6 @@ describe('List orders by state', () => {
             chefId: "3833470806868375603"
         })
         spyListOrders.mockRejectedValue(new Error('ERROR IN LIST ORDERS'))
-        
-        const listOrdersByState = new ListOrdersByState(orderPrismaRepository, restaurantEmployeePrismaRepository)
         
         await expect(listOrdersByState.listOrders('33430504539539593595', 'Pending', 2, 2)).rejects.toBeInstanceOf(Error)
     })
