@@ -20,7 +20,7 @@ app.use(express.json())
 app.use(morgan('dev'))
 app.use(cors())
 
-app.get('/', (request: Request, response: Response) =>{
+app.get('/', (_request: Request, response: Response) =>{
     response.status(201).json({
         message: 'Plazoleta Microservice v1'
     }).end()
