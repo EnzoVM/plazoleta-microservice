@@ -9,7 +9,7 @@ export default class CancelOrder {
 
     async cancelOrder (orderId: string, clientId: string) {
         try {
-            const orderFound = await this.orderPersistanceRepository.getOrderByOrderId(orderId)              
+            const orderFound = await this.orderPersistanceRepository.getOrderByOrderId(orderId)
             if(!orderFound){
                 throw new Error('Order not found')
             }
@@ -24,7 +24,7 @@ export default class CancelOrder {
             if(!orderCanceled){
                 throw new Error('Order can not be cancelled')
             }
-
+            
             return orderCanceled
 
         } catch (error: any) {
